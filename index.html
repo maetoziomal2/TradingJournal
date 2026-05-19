@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -141,6 +141,9 @@
             <div class="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-6">
                 <h3 class="text-sm font-bold text-slate-900 mb-4">Ostatnie transakcje</h3>
                 <div class="space-y-4">
+                    <template x-if="trades.length === 0">
+                        <p class="text-xs font-medium text-slate-400 py-2">Brak transakcji do wyświetlenia. Dodaj swój pierwszy trade!</p>
+                    </template>
                     <template x-for="trade in trades.slice(0, 5)" :key="trade.id">
                         <div class="flex justify-between items-center py-2 border-b border-slate-50 last:border-0">
                             <div class="flex items-center gap-4">
@@ -179,12 +182,6 @@
                         <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
                         <input type="text" placeholder="Szukaj po symbolu lub strategii..." class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs font-medium text-slate-700">
                     </div>
-                    <select class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-medium text-slate-700">
-                        <option>Wszystkie</option>
-                    </select>
-                    <select class="bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs font-medium text-slate-700">
-                        <option>Obie</option>
-                    </select>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -201,6 +198,13 @@
                             </tr>
                         </thead>
                         <tbody class="text-xs font-medium text-slate-700">
+                            <template x-if="trades.length === 0">
+                                <tr>
+                                    <td colspan="7" class="py-8 px-6 text-center text-slate-400 font-medium bg-white">
+                                        Twój dziennik jest pusty. Dodaj pierwszy trade w panelu bocznym!
+                                    </td>
+                                </tr>
+                            </template>
                             <template x-for="trade in trades" :key="trade.id">
                                 <tr class="border-b border-slate-100 hover:bg-slate-50/40 transition-colors">
                                     <td class="py-4 px-6 flex items-center gap-3">
@@ -214,7 +218,7 @@
                                     </td>
                                     <td class="py-4 px-4 text-slate-500" x-text="formatDate(trade.entry_date)"></td>
                                     <td class="py-4 px-4 font-mono font-semibold text-slate-900" x-text="parseFloat(trade.entry_price).toFixed(4)"></td>
-                                    <td class="py-4 px-4 font-mono font-semibold text-slate-900" x-text="parseFloat(trade.exit_price).toFixed(4)"></td>
+                                    <td class="py-4 px-4 font-mono font-semibold text-slate-900" x-text="trade.exit_price ? parseFloat(trade.exit_price).toFixed(4) : '-'"></td>
                                     <td class="py-4 px-4 font-bold" :class="trade.result === 'Wygrana' ? 'text-win-green' : 'text-loss-red'" x-text="(trade.pnl_pln >= 0 ? '+' : '') + parseFloat(trade.pnl_pln).toFixed(2)"></td>
                                     <td class="py-4 px-4">
                                         <span :class="trade.result === 'Wygrana' ? 'bg-emerald-50 text-win-green border-emerald-200' : 'bg-rose-50 text-loss-red border-rose-200'" class="px-2.5 py-1 rounded-full text-[10px] font-bold border" x-text="trade.result"></span>
@@ -390,13 +394,11 @@
             <div class="grid grid-cols-2 gap-6 mb-8">
                 <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 mb-4">Statystyki strategii</h3>
-                    <div class="space-y-3" id="strategyStatsContainer">
-                        </div>
+                    <div class="space-y-3" id="strategyStatsContainer"></div>
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
                     <h3 class="text-sm font-bold text-slate-900 mb-4">Emocje vs. wyniki</h3>
-                    <div class="space-y-3" id="emotionStatsContainer">
-                        </div>
+                    <div class="space-y-3" id="emotionStatsContainer"></div>
                 </div>
             </div>
 
@@ -412,8 +414,8 @@
 
     <script>
         // ================= KONFIGURACJA SUPABASE =================
-        // UZUPEŁNIJ SWOJE DANE TUTAJ:
-        const supabaseUrl = 'https://TWOJ_PROJEKT.supabase.co';
+        // Tutaj wklejasz swoje dane skopiowane z panelu Supabase:
+        const supabaseUrl = 'https://TWOJ_PROJEKT.supabase.co'; 
         const supabaseKey = 'TWOJ_KLUCZ_ANON';
         
         let supabaseClient = null;
@@ -421,7 +423,6 @@
             supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
         }
 
-        // Referencje do instancji wykresów, by móc je resetować
         let charts = {};
 
         function app() {
@@ -438,7 +439,7 @@
 
                 initApp() {
                     this.loadData();
-                    setTimeout(() => { lucide.createIcons(); }, 100);
+                    setTimeout(() => { lucide.createIcons(); }, 150);
                 },
 
                 changeView(view) {
@@ -456,15 +457,8 @@
 
                 async loadData() {
                     if (!supabaseClient) {
-                        // Dane testowe z Twoich screenów, gdy baza nie jest podłączona
-                        this.trades = [
-                            { id: 1, symbol: 'BTCUSD', direction: 'Long', result: 'Wygrana', entry_price: 103500, exit_price: 104200, pnl_pln: 70.00, entry_date: '2026-05-17T20:00', execution_rating: 3, strategy: 'ICT OB', emotion: 'Pewny siebie' },
-                            { id: 2, symbol: 'XAUUSD', direction: 'Long', result: 'Przegrana', entry_price: 2340.50, exit_price: 2335.20, pnl_pln: -106.00, entry_date: '2026-05-16T13:00', execution_rating: 1, strategy: 'Breakout', emotion: 'Sfrustrowany' },
-                            { id: 3, symbol: 'EURUSD', direction: 'Short', result: 'Wygrana', entry_price: 1.0910, exit_price: 1.0875, pnl_pln: 175.00, entry_date: '2026-05-15T10:15', execution_rating: 5, strategy: 'Supply Zone', emotion: 'Zdyscyplinowany' },
-                            { id: 4, symbol: 'USDJPY', direction: 'Long', result: 'Wygrana', entry_price: 157.25, exit_price: 157.68, pnl_pln: 120.50, entry_date: '2026-05-14T08:00', execution_rating: 4, strategy: 'ICT OB', emotion: 'Neutralny' },
-                            { id: 5, symbol: 'GBPUSD', direction: 'Short', result: 'Przegrana', entry_price: 1.2544, exit_price: 1.2568, pnl_pln: -72.00, entry_date: '2026-05-13T11:00', execution_rating: 2, strategy: 'Supply Zone', emotion: 'Chciwy' },
-                            { id: 6, symbol: 'EURUSD', direction: 'Long', result: 'Wygrana', entry_price: 1.0852, exit_price: 1.0889, pnl_pln: 185.00, entry_date: '2026-05-12T09:30', execution_rating: 5, strategy: 'ICT OB', emotion: 'Zdyscyplinowany' }
-                        ];
+                        // Jeśli baza nie jest podłączona, zaczynamy z czystą tablicą
+                        this.trades = [];
                         this.calculateStats();
                         return;
                     }
@@ -484,7 +478,11 @@
                 },
 
                 calculateStats() {
-                    if (this.trades.length === 0) return;
+                    if (this.trades.length === 0) {
+                        this.stats = { totalPnl: 0, winRate: 0, wins: 0, losses: 0, profitFactor: '0.00', avgWin: 0 };
+                        this.renderCharts();
+                        return;
+                    }
 
                     let totalPnl = 0;
                     let wins = 0;
@@ -511,9 +509,7 @@
                     this.stats.avgWin = wins > 0 ? (totalWinAmount / wins) : 0;
                     this.stats.profitFactor = totalLossAmount > 0 ? (totalWinAmount / totalLossAmount).toFixed(2) : totalWinAmount.toFixed(2);
                     
-                    if(this.currentView === 'pulpit' || this.currentView === 'analityka') {
-                        this.renderCharts();
-                    }
+                    this.renderCharts();
                 },
 
                 async saveTrade() {
@@ -530,7 +526,7 @@
                             alert('Błąd zapisu w Supabase: ' + err.message);
                         }
                     } else {
-                        // Tryb demo lokalny
+                        // Jeśli nie ma Supabase, zapisujemy w pamięci tymczasowej przeglądarki
                         newTrade.id = Date.now();
                         this.trades.unshift(newTrade);
                         this.calculateStats();
@@ -555,19 +551,16 @@
                 },
 
                 renderCharts() {
-                    // Segregacja chronologiczna do wykresu liniowego
                     const sortedTrades = [...this.trades].sort((a, b) => new Date(a.entry_date) - new Date(b.entry_date));
-                    let currentEquity = 150; // Wartość początkowa odwzorowująca Twoją krzywą
-                    const baseLabels = sortedTrades.map(t => {
-                        const d = new Date(t.entry_date);
-                        return d.getDate() + ' maj';
-                    });
+                    let currentEquity = 0;
+                    
+                    const baseLabels = sortedTrades.map((t, idx) => `Trade ${idx + 1}`);
                     const baseData = sortedTrades.map(t => {
                         currentEquity += parseFloat(t.pnl_pln) || 0;
                         return currentEquity;
                     });
 
-                    // 1. Wykres liniowy - Pulpit i Analityka
+                    // 1. Wykres liniowy - Krzywa kapitału
                     ['equityChartDashboard', 'equityChartAnalytics'].forEach(id => {
                         const ctx = document.getElementById(id);
                         if (!ctx) return;
@@ -576,13 +569,13 @@
                         charts[id] = new Chart(ctx, {
                             type: 'line',
                             data: {
-                                labels: baseLabels.length ? baseLabels : ['12 maj', '13 maj', '14 maj', '15 maj', '16 maj', '17 maj'],
+                                labels: baseLabels.length ? baseLabels : ['Brak danych'],
                                 datasets: [{
-                                    data: baseData.length ? baseData : [170, 110, 220, 400, 300, 360],
+                                    data: baseData.length ? baseData : [0],
                                     borderColor: '#10B981',
                                     borderWidth: 2,
                                     tension: 0.4,
-                                    pointRadius: 0,
+                                    pointRadius: baseData.length ? 3 : 0,
                                     fill: true,
                                     backgroundColor: (context) => {
                                         const chart = context.chart;
@@ -601,27 +594,28 @@
                                 plugins: { legend: { display: false } },
                                 scales: {
                                     x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
-                                    y: { min: 0, max: 600, ticks: { stepSize: 150, color: '#94A3B8', font: { size: 10 } }, grid: { color: '#F1F5F9' } }
+                                    y: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#F1F5F9' } }
                                 }
                             }
                         });
                     });
 
-                    // 2. Wykres kołowy (Doughnut) - Pulpit i Analityka
+                    // 2. Wykres kołowy
                     ['pieChartDashboard', 'pieChartAnalytics'].forEach(id => {
                         const ctx = document.getElementById(id);
                         if (!ctx) return;
                         if (charts[id]) charts[id].destroy();
+
+                        const hasData = this.stats.wins > 0 || this.stats.losses > 0;
 
                         charts[id] = new Chart(ctx, {
                             type: 'doughnut',
                             data: {
                                 labels: ['Wygrane', 'Przegrane'],
                                 datasets: [{
-                                    data: [this.stats.wins || 4, this.stats.losses || 2],
-                                    backgroundColor: ['#10B981', '#EF4444'],
-                                    borderWidth: 0,
-                                    weight: 0.5
+                                    data: hasData ? [this.stats.wins, this.stats.losses] : [1, 0],
+                                    backgroundColor: hasData ? ['#10B981', '#EF4444'] : ['#E2E8F0', '#E2E8F0'],
+                                    borderWidth: 0
                                 }]
                             },
                             options: {
@@ -633,21 +627,28 @@
                         });
                     });
 
-                    // 3. Wykres słupkowy dni tygodnia - Tylko w Analityce
+                    // 3. Wykres słupkowy dni tygodnia
                     const ctxBar = document.getElementById('dayOfWeekChart');
                     if (ctxBar) {
                         if (charts['dayOfWeekChart']) charts['dayOfWeekChart'].destroy();
 
-                        // Mapowanie P&L na dni tygodnia
-                        const dayPnl = { 'Pon.': 0, 'Wt.': 175, 'Śr.': -50, 'Czw.': 120, 'Pt.': 160, 'Sob.': -95, 'Niedz.': 60 };
-                        
+                        const days = ['Pon.', 'Wt.', 'Śr.', 'Czw.', 'Pt.', 'Sob.', 'Niedz.'];
+                        const dayPnlValues = [0, 0, 0, 0, 0, 0, 0];
+
+                        sortedTrades.forEach(t => {
+                            if (!t.entry_date) return;
+                            let dayIdx = new Date(t.entry_date).getDay(); // 0 = Niedz, 1 = Pon...
+                            let mappedIdx = dayIdx === 0 ? 6 : dayIdx - 1; 
+                            dayPnlValues[mappedIdx] += parseFloat(t.pnl_pln) || 0;
+                        });
+
                         charts['dayOfWeekChart'] = new Chart(ctxBar, {
                             type: 'bar',
                             data: {
-                                labels: Object.keys(dayPnl),
+                                labels: days,
                                 datasets: [{
-                                    data: Object.values(dayPnl),
-                                    backgroundColor: Object.values(dayPnl).map(v => v >= 0 ? '#2563EB' : '#2563EB'),
+                                    data: dayPnlValues,
+                                    backgroundColor: dayPnlValues.map(v => v >= 0 ? '#2563EB' : '#EF4444'),
                                     borderRadius: 6
                                 }]
                             },
@@ -657,7 +658,7 @@
                                 plugins: { legend: { display: false } },
                                 scales: {
                                     x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
-                                    y: { min: -190, max: 190, ticks: { stepSize: 95, color: '#94A3B8', font: { size: 10 } }, grid: { color: '#F1F5F9' } }
+                                    y: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#F1F5F9' } }
                                 }
                             }
                         });
@@ -665,45 +666,62 @@
                 },
 
                 renderCategorizedStats() {
-                    // Statystyki strategii
                     const stratContainer = document.getElementById('strategyStatsContainer');
-                    if (stratContainer) {
-                        const stratData = [
-                            { name: 'ICT OB', trades: '3 transakcje', wr: 'WR: 100%', pnl: '+375.50', isWin: true },
-                            { name: 'Supply Zone', trades: '2 transakcje', wr: 'WR: 50%', pnl: '+103.00', isWin: true },
-                            { name: 'Breakout', trades: '1 transakcja', wr: 'WR: 0%', pnl: '-106.00', isWin: false }
-                        ];
-                        stratContainer.innerHTML = stratData.map(s => `
-                            <div class="flex justify-between items-center bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-                                <div>
-                                    <h4 class="text-xs font-bold text-slate-900">${s.name}</h4>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">${s.trades} • ${s.wr}</p>
-                                </div>
-                                <span class="text-xs font-bold ${s.isWin ? 'text-win-green' : 'text-loss-red'}">${s.pnl}</span>
-                            </div>
-                        `).join('');
+                    const emoContainer = document.getElementById('emotionStatsContainer');
+                    
+                    if (!stratContainer || !emoContainer) return;
+
+                    if (this.trades.length === 0) {
+                        stratContainer.innerHTML = '<p class="text-xs text-slate-400">Brak danych. Dodaj transakcje, aby zobaczyć statystyki strategii.</p>';
+                        emoContainer.innerHTML = '<p class="text-xs text-slate-400">Brak danych. Dodaj transakcje, aby zobaczyć analizę emocji.</p>';
+                        return;
                     }
 
-                    // Statystyki emocji
-                    const emoContainer = document.getElementById('emotionStatsContainer');
-                    if (emoContainer) {
-                        const emoData = [
-                            { name: 'Zdyscyplinowany', trades: '2 transakcje • WR: 100%', pnl: '+360.00', isWin: true },
-                            { name: 'Neutralny', trades: '1 transakcja • WR: 100%', pnl: '+70.00', isWin: true },
-                            { name: 'Sfrustrowany', trades: '1 transakcja • WR: 0%', pnl: '-106.00', isWin: false },
-                            { name: 'Pewny siebie', trades: '1 transakcja • WR: 100%', pnl: '+120.50', isWin: true },
-                            { name: 'Chciwy', trades: '1 transakcja • WR: 0%', pnl: '-72.00', isWin: false }
-                        ];
-                        emoContainer.innerHTML = emoData.map(e => `
+                    // Obliczanie statystyk strategii dynamicznie
+                    let strategies = {};
+                    let emotions = {};
+
+                    this.trades.forEach(t => {
+                        const strat = t.strategy || 'Nieokreślona';
+                        const emo = t.emotion || 'Nieokreślone';
+                        const pnl = parseFloat(t.pnl_pln) || 0;
+
+                        if (!strategies[strat]) strategies[strat] = { count: 0, wins: 0, pnl: 0 };
+                        strategies[strat].count++;
+                        strategies[strat].pnl += pnl;
+                        if (t.result === 'Wygrana') strategies[strat].wins++;
+
+                        if (!emotions[emo]) emotions[emo] = { count: 0, wins: 0, pnl: 0 };
+                        emotions[emo].count++;
+                        emotions[emo].pnl += pnl;
+                        if (t.result === 'Wygrana') emotions[emo].wins++;
+                    });
+
+                    stratContainer.innerHTML = Object.keys(strategies).map(key => {
+                        const s = strategies[key];
+                        const wr = ((s.wins / s.count) * 100).toFixed(0);
+                        return `
+                            <div class="flex justify-between items-center bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-900">${key}</h4>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">${s.count} transakcji • WR: ${wr}%</p>
+                                </div>
+                                <span class="text-xs font-bold ${s.pnl >= 0 ? 'text-win-green' : 'text-loss-red'}">${s.pnl >= 0 ? '+' : ''}${s.pnl.toFixed(2)}</span>
+                            </div>`;
+                    }).join('');
+
+                    emoContainer.innerHTML = Object.keys(emotions).map(key => {
+                        const e = emotions[key];
+                        const wr = ((e.wins / e.count) * 100).toFixed(0);
+                        return `
                             <div class="flex justify-between items-center bg-slate-50/50 p-3.5 rounded-xl border border-slate-100">
                                 <div>
-                                    <h4 class="text-xs font-bold text-slate-900">${e.name}</h4>
-                                    <p class="text-[10px] text-slate-400 mt-0.5">${e.trades}</p>
+                                    <h4 class="text-xs font-bold text-slate-900">${key}</h4>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">${e.count} transakcji • WR: ${wr}%</p>
                                 </div>
-                                <span class="text-xs font-bold ${e.isWin ? 'text-win-green' : 'text-loss-red'}">${e.pnl}</span>
-                            </div>
-                        `).join('');
-                    }
+                                <span class="text-xs font-bold ${e.pnl >= 0 ? 'text-win-green' : 'text-loss-red'}">${e.pnl >= 0 ? '+' : ''}${e.pnl.toFixed(2)}</span>
+                            </div>`;
+                    }).join('');
                 }
             }
         }
