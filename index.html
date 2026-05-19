@@ -20,15 +20,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // BEZPIECZEŃSTWO: Sprawdź, czy użytkownik jest zalogowany
-const loggedInLocal = localStorage.getItem('isLoggedIn') === 'true';
-const loggedInSession = sessionStorage.getItem('isLoggedIn') === 'true';
-
-if (!loggedInLocal && !loggedInSession) {
-    // Jeśli nie ma flagi ani tu, ani tu -> wypad na stronę logowania
-    window.location.href = 'login.html';
-}
-        
         tailwind.config = {
             theme: {
                 extend: {
@@ -81,7 +72,7 @@ if (!loggedInLocal && !loggedInSession) {
         </nav>
 
         <div class="p-4 border-t border-slate-100">
-            <button @click="handleLogout()" class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors w-full text-left">
+            <button class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors w-full">
                 <i data-lucide="log-out" class="w-4 h-4"></i> Wyloguj się
             </button>
         </div>
@@ -97,7 +88,7 @@ if (!loggedInLocal && !loggedInSession) {
                 <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex justify-between items-start">
                     <div>
                         <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Łączny P&L</p>
-                        <h3 class="text-2xl font-bold mt-2" :class="stats.totalPnl >= 0 ? 'text-slate-900' : 'text-loss-red'" x-text="(stats.totalPnl >= 0 ? '+' : '') + stats.totalPnl.toFixed(2)">+0.00</h3>
+                        <h3 class="text-2xl font-bold mt-2 text-slate-900" :class="stats.totalPnl >= 0 ? 'text-slate-900' : 'text-loss-red'" x-text="(stats.totalPnl >= 0 ? '+' : '') + stats.totalPnl.toFixed(2)">+0.00</h3>
                         <p class="text-[11px] text-slate-400 mt-1">PLN</p>
                     </div>
                     <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400"><i data-lucide="dollar-sign" class="w-4 h-4"></i></div>
@@ -120,17 +111,17 @@ if (!loggedInLocal && !loggedInSession) {
                 </div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex justify-between items-start">
                     <div>
-                        <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Aktualny Balans</p>
-                        <h3 class="text-2xl font-bold mt-2 text-slate-900" x-text="(startCapital + stats.totalPnl).toFixed(2) + ' PLN'">0.00 PLN</h3>
-                        <p class="text-[11px] text-slate-400 mt-1" x-text="'Start: ' + startCapital + ' PLN'">Start: 0 PLN</p>
+                        <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Transakcje</p>
+                        <h3 class="text-2xl font-bold mt-2 text-slate-900" x-text="trades.length">0</h3>
+                        <p class="text-[11px] text-slate-400 mt-1">Łącznie</p>
                     </div>
-                    <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400"><i data-lucide="wallet" class="w-4 h-4"></i></div>
+                    <div class="bg-slate-50 p-2.5 rounded-xl text-slate-400"><i data-lucide="bar-chart-2" class="w-4 h-4"></i></div>
                 </div>
             </div>
 
             <div class="grid grid-cols-3 gap-6 mb-8">
                 <div class="col-span-2 bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-4">Krzywa kapitału (Stan konta)</h3>
+                    <h3 class="text-sm font-bold text-slate-900 mb-4">Krzywa kapitału</h3>
                     <div class="h-64 relative">
                         <canvas id="equityChartDashboard"></canvas>
                     </div>
@@ -189,7 +180,7 @@ if (!loggedInLocal && !loggedInSession) {
                 <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex gap-3">
                     <div class="relative flex-1 max-w-xs">
                         <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
-                        <input type="text" placeholder="Szukaj po symbolu..." class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs font-medium text-slate-700">
+                        <input type="text" placeholder="Szukaj po symbolu lub strategii..." class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs font-medium text-slate-700">
                     </div>
                 </div>
 
@@ -210,7 +201,7 @@ if (!loggedInLocal && !loggedInSession) {
                             <template x-if="trades.length === 0">
                                 <tr>
                                     <td colspan="7" class="py-8 px-6 text-center text-slate-400 font-medium bg-white">
-                                        Twój dziennik jest pusty. Dodaj pierwszy trade!
+                                        Twój dziennik jest pusty. Dodaj pierwszy trade w panelu bocznym!
                                     </td>
                                 </tr>
                             </template>
@@ -347,7 +338,7 @@ if (!loggedInLocal && !loggedInSession) {
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-700 mb-1.5">Emocje</label>
-                        <select x-model="form.emotion" class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-medium text-slate-800">
+                        <select x-model="form.emotion" class="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs font-medium text-slate-800">
                             <option value="">Wybierz</option>
                             <option value="Zdyscyplinowany">Zdyscyplinowany</option>
                             <option value="Neutralny">Neutralny</option>
@@ -410,22 +401,33 @@ if (!loggedInLocal && !loggedInSession) {
                     <div class="space-y-3" id="emotionStatsContainer"></div>
                 </div>
             </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 mb-4">P&L wg dnia tygodnia</h3>
+                <div class="h-64 relative">
+                    <canvas id="dayOfWeekChart"></canvas>
+                </div>
+            </div>
         </div>
 
     </main>
 
     <script>
         // ================= KONFIGURACJA SUPABASE =================
-        const supabaseUrl = 'https://svmepxuwnvwyayeabdgm.supabase.co'; 
+        // Tutaj wklejasz swoje dane skopiowane z panelu Supabase:
+        const supabaseUrl = 'https://svmepxuwnvwyayeabdgm.supabase.co/rest/v1/'; 
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWVweHV3bnZ3eWF5ZWFiZGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDI5MTIsImV4cCI6MjA5NDc3ODkxMn0.K4a2vQ6lXFJ2f7_VGld72iApvUNr9ubnQP9O2xfv6Vc';
         
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        let supabaseClient = null;
+        if(supabaseUrl && !supabaseUrl.includes('TWOJ_PROJEKT')) {
+            supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        }
+
         let charts = {};
 
         function app() {
             return {
                 currentView: 'pulpit',
-                startCapital: 10000, // Twój kapitał startowy (możesz edytować)
                 trades: [],
                 stats: { totalPnl: 0, winRate: 0, wins: 0, losses: 0, profitFactor: '0.00', avgWin: 0 },
                 form: {
@@ -435,22 +437,9 @@ if (!loggedInLocal && !loggedInSession) {
                     timeframe: '', strategy: '', setup: '', emotion: '', execution_rating: 5, notes: ''
                 },
 
-                async initApp() {
-                    // SPRAWDZENIE LOGOWANIA
-                    const { data: { session } } = await supabaseClient.auth.getSession();
-                    if (!session) {
-                        // Brak sesji -> przekierowanie na stronę logowania
-                        window.location.href = 'login.html';
-                        return;
-                    }
-
+                initApp() {
                     this.loadData();
                     setTimeout(() => { lucide.createIcons(); }, 150);
-                },
-
-                async handleLogout() {
-                    await supabaseClient.auth.signOut();
-                    window.location.href = 'login.html';
                 },
 
                 changeView(view) {
@@ -467,25 +456,35 @@ if (!loggedInLocal && !loggedInSession) {
                 },
 
                 async loadData() {
+                    if (!supabaseClient) {
+                        // Jeśli baza nie jest podłączona, zaczynamy z czystą tablicą
+                        this.trades = [];
+                        this.calculateStats();
+                        return;
+                    }
+
                     try {
                         const { data, error } = await supabaseClient
                             .from('trades')
                             .select('*')
-                            .order('entry_date', { ascending: true }); // Rosnąco do kalkulacji krzywej kapitału
+                            .order('entry_date', { ascending: false });
 
                         if (error) throw error;
-                        
-                        // Zapisujemy trady (odwracamy tablicę dla widoku "ostatnich transakcji", gdzie chcemy najnowsze u góry)
                         this.trades = data || [];
                         this.calculateStats();
-                        this.renderCharts();
                     } catch (err) {
                         console.error('Błąd podczas pobierania danych:', err);
                     }
                 },
 
                 calculateStats() {
-                    let total = 0;
+                    if (this.trades.length === 0) {
+                        this.stats = { totalPnl: 0, winRate: 0, wins: 0, losses: 0, profitFactor: '0.00', avgWin: 0 };
+                        this.renderCharts();
+                        return;
+                    }
+
+                    let totalPnl = 0;
                     let wins = 0;
                     let losses = 0;
                     let totalWinAmount = 0;
@@ -493,7 +492,7 @@ if (!loggedInLocal && !loggedInSession) {
 
                     this.trades.forEach(t => {
                         const pnl = parseFloat(t.pnl_pln) || 0;
-                        total += pnl;
+                        totalPnl += pnl;
                         if (t.result === 'Wygrana') {
                             wins++;
                             totalWinAmount += pnl;
@@ -503,125 +502,226 @@ if (!loggedInLocal && !loggedInSession) {
                         }
                     });
 
-                    this.stats.totalPnl = total;
+                    this.stats.totalPnl = totalPnl;
                     this.stats.wins = wins;
                     this.stats.losses = losses;
-                    this.stats.winRate = this.trades.length ? Math.round((wins / this.trades.length) * 100) : 0;
-                    this.stats.avgWin = wins ? (totalWinAmount / wins) : 0;
-                    this.stats.profitFactor = totalLossAmount ? (totalWinAmount / totalLossAmount).toFixed(2) : totalWinAmount ? 'Max' : '0.00';
+                    this.stats.winRate = ((wins / this.trades.length) * 100).toFixed(1);
+                    this.stats.avgWin = wins > 0 ? (totalWinAmount / wins) : 0;
+                    this.stats.profitFactor = totalLossAmount > 0 ? (totalWinAmount / totalLossAmount).toFixed(2) : totalWinAmount.toFixed(2);
+                    
+                    this.renderCharts();
                 },
 
                 async saveTrade() {
-                    try {
-                        // Pobieramy aktualnego zalogowanego użytkownika
-                        const { data: { user } } = await supabaseClient.auth.getUser();
-                        
-                        const payload = {
-                            ...this.form,
-                            user_id: user.id, // Przypisujemy trade do użytkownika
-                            entry_price: parseFloat(this.form.entry_price),
-                            exit_price: this.form.exit_price ? parseFloat(this.form.exit_price) : null,
-                            pnl_pln: parseFloat(this.form.pnl_pln),
-                            pnl_percent: this.form.pnl_percent ? parseFloat(this.form.pnl_percent) : null,
-                            execution_rating: parseInt(this.form.execution_rating)
-                        };
-
-                        const { error } = await supabaseClient.from('trades').insert([payload]);
-                        if (error) throw error;
-
-                        // Reset formularza i powrót do dziennika
-                        this.form = {
-                            symbol: '', direction: 'Long', result: 'Wygrana', entry_price: '', exit_price: '', position_size: '',
-                            pnl_pln: '', pnl_percent: '', entry_date: '', exit_date: '', timeframe: '', strategy: '', setup: '', emotion: '', execution_rating: 5, notes: ''
-                        };
-
-                        await this.loadData();
+                    const newTrade = { ...this.form };
+                    
+                    if (supabaseClient) {
+                        try {
+                            const { error } = await supabaseClient.from('trades').insert([newTrade]);
+                            if (error) throw error;
+                            await this.loadData();
+                            this.resetForm();
+                            this.changeView('dziennik');
+                        } catch (err) {
+                            alert('Błąd zapisu w Supabase: ' + err.message);
+                        }
+                    } else {
+                        // Jeśli nie ma Supabase, zapisujemy w pamięci tymczasowej przeglądarki
+                        newTrade.id = Date.now();
+                        this.trades.unshift(newTrade);
+                        this.calculateStats();
+                        this.resetForm();
                         this.changeView('dziennik');
-                    } catch (err) {
-                        alert('Błąd zapisu: ' + err.message);
                     }
                 },
 
-                renderCharts() {
-                    // Generator danych dla krzywej kapitału bazujący na kapitale startowym
-                    let currentBalance = this.startCapital;
-                    let equityData = [currentBalance];
-                    let labels = ['Start'];
-
-                    // Sortujemy na chwilę transakcje od najstarszych do najnowszych do wykresu liniowego
-                    const sortedTrades = [...this.trades].sort((a,b) => new Date(a.entry_date) - new Date(b.entry_date));
-                    
-                    sortedTrades.forEach((t, index) => {
-                        currentBalance += parseFloat(t.pnl_pln) || 0;
-                        equityData.push(currentBalance);
-                        labels.push(`Trade ${index + 1}`);
-                    });
-
-                    // Wykres Liniowy - Pulpit
-                    this.createLineChart('equityChartDashboard', labels, equityData);
-                    // Wykres Liniowy - Analityka
-                    this.createLineChart('equityChartAnalytics', labels, equityData);
-
-                    // Wykres Kołowy (Wyniki)
-                    this.createPieChart('pieChartDashboard');
-                    this.createPieChart('pieChartAnalytics');
-                },
-
-                createLineChart(canvasId, labels, data) {
-                    if(!document.getElementById(canvasId)) return;
-                    if(charts[canvasId]) charts[canvasId].destroy();
-
-                    const ctx = document.getElementById(canvasId).getContext('2d');
-                    charts[canvasId] = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Stan konta (PLN)',
-                                data: data,
-                                borderColor: '#2563EB',
-                                backgroundColor: 'rgba(37, 99, 235, 0.05)',
-                                borderWidth: 2,
-                                fill: true,
-                                tension: 0.1
-                            }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false }
-                    });
-                },
-
-                createPieChart(canvasId) {
-                    if(!document.getElementById(canvasId)) return;
-                    if(charts[canvasId]) charts[canvasId].destroy();
-
-                    const ctx = document.getElementById(canvasId).getContext('2d');
-                    charts[canvasId] = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Wygrane', 'Przegrane'],
-                            datasets: [{
-                                data: [this.stats.wins, this.stats.losses],
-                                backgroundColor: ['#10B981', '#EF4444'],
-                                borderWidht: 0
-                            }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-                    });
-                },
-
-                renderCategorizedStats() {
-                    // Funkcja pomocnicza do generowania pasków postępu w zakładce analityka
-                    const stratContainer = document.getElementById('strategyStatsContainer');
-                    const emotContainer = document.getElementById('emotionStatsContainer');
-                    
-                    if(stratContainer) stratContainer.innerHTML = '<p class="text-xs text-slate-400">Analiza strategii wygeneruje się po dodaniu transakcji z określonymi tagami.</p>';
-                    if(emotContainer) emotContainer.innerHTML = '<p class="text-xs text-slate-400">Analiza emocji wygeneruje się po dodaniu transakcji z określonymi tagami.</p>';
+                resetForm() {
+                    this.form = {
+                        symbol: '', direction: 'Long', result: 'Wygrana',
+                        entry_price: '', exit_price: '', position_size: '',
+                        pnl_pln: '', pnl_percent: '', entry_date: '', exit_date: '',
+                        timeframe: '', strategy: '', setup: '', emotion: '', execution_rating: 5, notes: ''
+                    };
                 },
 
                 formatDate(dateStr) {
-                    if(!dateStr) return '-';
+                    if (!dateStr) return '';
                     const d = new Date(dateStr);
                     return d.toLocaleDateString('pl-PL') + ' ' + d.toLocaleTimeString('pl-PL', {hour: '2-digit', minute:'2-digit'});
+                },
+
+                renderCharts() {
+                    const sortedTrades = [...this.trades].sort((a, b) => new Date(a.entry_date) - new Date(b.entry_date));
+                    let currentEquity = 0;
+                    
+                    const baseLabels = sortedTrades.map((t, idx) => `Trade ${idx + 1}`);
+                    const baseData = sortedTrades.map(t => {
+                        currentEquity += parseFloat(t.pnl_pln) || 0;
+                        return currentEquity;
+                    });
+
+                    // 1. Wykres liniowy - Krzywa kapitału
+                    ['equityChartDashboard', 'equityChartAnalytics'].forEach(id => {
+                        const ctx = document.getElementById(id);
+                        if (!ctx) return;
+                        if (charts[id]) charts[id].destroy();
+
+                        charts[id] = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: baseLabels.length ? baseLabels : ['Brak danych'],
+                                datasets: [{
+                                    data: baseData.length ? baseData : [0],
+                                    borderColor: '#10B981',
+                                    borderWidth: 2,
+                                    tension: 0.4,
+                                    pointRadius: baseData.length ? 3 : 0,
+                                    fill: true,
+                                    backgroundColor: (context) => {
+                                        const chart = context.chart;
+                                        const {ctx, chartArea} = chart;
+                                        if (!chartArea) return null;
+                                        const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                                        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.12)');
+                                        gradient.addColorStop(1, 'rgba(16, 185, 129, 0.0)');
+                                        return gradient;
+                                    }
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
+                                    y: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#F1F5F9' } }
+                                }
+                            }
+                        });
+                    });
+
+                    // 2. Wykres kołowy
+                    ['pieChartDashboard', 'pieChartAnalytics'].forEach(id => {
+                        const ctx = document.getElementById(id);
+                        if (!ctx) return;
+                        if (charts[id]) charts[id].destroy();
+
+                        const hasData = this.stats.wins > 0 || this.stats.losses > 0;
+
+                        charts[id] = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Wygrane', 'Przegrane'],
+                                datasets: [{
+                                    data: hasData ? [this.stats.wins, this.stats.losses] : [1, 0],
+                                    backgroundColor: hasData ? ['#10B981', '#EF4444'] : ['#E2E8F0', '#E2E8F0'],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                cutout: '75%',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } }
+                            }
+                        });
+                    });
+
+                    // 3. Wykres słupkowy dni tygodnia
+                    const ctxBar = document.getElementById('dayOfWeekChart');
+                    if (ctxBar) {
+                        if (charts['dayOfWeekChart']) charts['dayOfWeekChart'].destroy();
+
+                        const days = ['Pon.', 'Wt.', 'Śr.', 'Czw.', 'Pt.', 'Sob.', 'Niedz.'];
+                        const dayPnlValues = [0, 0, 0, 0, 0, 0, 0];
+
+                        sortedTrades.forEach(t => {
+                            if (!t.entry_date) return;
+                            let dayIdx = new Date(t.entry_date).getDay(); // 0 = Niedz, 1 = Pon...
+                            let mappedIdx = dayIdx === 0 ? 6 : dayIdx - 1; 
+                            dayPnlValues[mappedIdx] += parseFloat(t.pnl_pln) || 0;
+                        });
+
+                        charts['dayOfWeekChart'] = new Chart(ctxBar, {
+                            type: 'bar',
+                            data: {
+                                labels: days,
+                                datasets: [{
+                                    data: dayPnlValues,
+                                    backgroundColor: dayPnlValues.map(v => v >= 0 ? '#2563EB' : '#EF4444'),
+                                    borderRadius: 6
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    x: { grid: { display: false }, ticks: { color: '#94A3B8', font: { size: 10 } } },
+                                    y: { ticks: { color: '#94A3B8', font: { size: 10 } }, grid: { color: '#F1F5F9' } }
+                                }
+                            }
+                        });
+                    }
+                },
+
+                renderCategorizedStats() {
+                    const stratContainer = document.getElementById('strategyStatsContainer');
+                    const emoContainer = document.getElementById('emotionStatsContainer');
+                    
+                    if (!stratContainer || !emoContainer) return;
+
+                    if (this.trades.length === 0) {
+                        stratContainer.innerHTML = '<p class="text-xs text-slate-400">Brak danych. Dodaj transakcje, aby zobaczyć statystyki strategii.</p>';
+                        emoContainer.innerHTML = '<p class="text-xs text-slate-400">Brak danych. Dodaj transakcje, aby zobaczyć analizę emocji.</p>';
+                        return;
+                    }
+
+                    // Obliczanie statystyk strategii dynamicznie
+                    let strategies = {};
+                    let emotions = {};
+
+                    this.trades.forEach(t => {
+                        const strat = t.strategy || 'Nieokreślona';
+                        const emo = t.emotion || 'Nieokreślone';
+                        const pnl = parseFloat(t.pnl_pln) || 0;
+
+                        if (!strategies[strat]) strategies[strat] = { count: 0, wins: 0, pnl: 0 };
+                        strategies[strat].count++;
+                        strategies[strat].pnl += pnl;
+                        if (t.result === 'Wygrana') strategies[strat].wins++;
+
+                        if (!emotions[emo]) emotions[emo] = { count: 0, wins: 0, pnl: 0 };
+                        emotions[emo].count++;
+                        emotions[emo].pnl += pnl;
+                        if (t.result === 'Wygrana') emotions[emo].wins++;
+                    });
+
+                    stratContainer.innerHTML = Object.keys(strategies).map(key => {
+                        const s = strategies[key];
+                        const wr = ((s.wins / s.count) * 100).toFixed(0);
+                        return `
+                            <div class="flex justify-between items-center bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-900">${key}</h4>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">${s.count} transakcji • WR: ${wr}%</p>
+                                </div>
+                                <span class="text-xs font-bold ${s.pnl >= 0 ? 'text-win-green' : 'text-loss-red'}">${s.pnl >= 0 ? '+' : ''}${s.pnl.toFixed(2)}</span>
+                            </div>`;
+                    }).join('');
+
+                    emoContainer.innerHTML = Object.keys(emotions).map(key => {
+                        const e = emotions[key];
+                        const wr = ((e.wins / e.count) * 100).toFixed(0);
+                        return `
+                            <div class="flex justify-between items-center bg-slate-50/50 p-3.5 rounded-xl border border-slate-100">
+                                <div>
+                                    <h4 class="text-xs font-bold text-slate-900">${key}</h4>
+                                    <p class="text-[10px] text-slate-400 mt-0.5">${e.count} transakcji • WR: ${wr}%</p>
+                                </div>
+                                <span class="text-xs font-bold ${e.pnl >= 0 ? 'text-win-green' : 'text-loss-red'}">${e.pnl >= 0 ? '+' : ''}${e.pnl.toFixed(2)}</span>
+                            </div>`;
+                    }).join('');
                 }
             }
         }
