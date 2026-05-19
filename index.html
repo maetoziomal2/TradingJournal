@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dziennik Tradera</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-blue': '#2563EB',
+                        'bg-light': '#F8FAFC',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F8FAFC; color: #0f172a; }
+        /* Ukrywanie widoków, które nie są aktywne */
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body x-data="app()" class="flex min-h-screen font-sans">
+
+    <aside class="w-64 bg-white border-r border-slate-200 h-screen flex flex-col fixed left-0 top-0">
+        <div class="p-6 flex items-center gap-3">
+            <div class="bg-brand-blue text-white p-2 rounded-lg">
+                <i data-lucide="trending-up" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-slate-900 leading-tight">Dziennik Tradera</h1>
+                <p class="text-[10px] text-slate-500 tracking-wider">TRADING JOURNAL</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 px-4 mt-6 space-y-1">
+            <button @click="currentView = 'pulpit'" :class="currentView === 'pulpit' ? 'bg-brand-blue text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full text-left">
+                <i data-lucide="layout-grid" class="w-4 h-4"></i> Pulpit
+            </button>
+            <button @click="currentView = 'dziennik'" :class="currentView === 'dziennik' ? 'bg-brand-blue text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full text-left">
+                <i data-lucide="book-open" class="w-4 h-4"></i> Dziennik
+            </button>
+            <button @click="currentView = 'nowy-trade'" :class="currentView === 'nowy-trade' ? 'bg-brand-blue text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full text-left">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> Nowy trade
+            </button>
+            <button @click="currentView = 'analityka'" :class="currentView === 'analityka' ? 'bg-brand-blue text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full text-left">
+                <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Analityka
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-200">
+            <button class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors w-full">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Wyloguj się
+            </button>
+        </div>
+    </aside>
+
+    <main class="ml-64 flex-1 p-8">
+        
+        <div x-show="currentView === 'pulpit'" x-cloak>
+            <h1 class="text-2xl font-bold text-slate-900">Pulpit</h1>
+            <p class="text-sm text-slate-500 mb-6">Przegląd Twoich wyników tradingowych</p>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                Miejsce na statystyki i wykres z pierwszego zdjęcia.
+            </div>
+        </div>
+
+        <div x-show="currentView === 'dziennik'" x-cloak>
+             <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Dziennik transakcji</h1>
+                    <p class="text-sm text-slate-500">6 transakcji łącznie</p>
+                </div>
+                <button @click="currentView = 'nowy-trade'" class="bg-brand-blue text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-blue-700 transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Nowy trade
+                </button>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                Miejsce na tabelę z drugiego zdjęcia.
+            </div>
+        </div>
+
+        <div x-show="currentView === 'nowy-trade'" x-cloak>
+            <div class="mb-6 flex items-center gap-2 text-slate-600 hover:text-slate-900 cursor-pointer w-fit" @click="currentView = 'dziennik'">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> <span class="text-sm font-medium">Wróć</span>
+            </div>
+            <h1 class="text-2xl font-bold text-slate-900">Nowy trade</h1>
+            <p class="text-sm text-slate-500 mb-6">Zapisz szczegóły transakcji</p>
+            
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm max-w-2xl">
+                 Miejsce na formularz z trzeciego zdjęcia.
+            </div>
+        </div>
+
+        <div x-show="currentView === 'analityka'" x-cloak>
+            <h1 class="text-2xl font-bold text-slate-900">Analityka</h1>
+            <p class="text-sm text-slate-500 mb-6">Szczegółowa analiza Twojego tradingu</p>
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                 Miejsce na wykresy z czwartego zdjęcia.
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Inicjalizacja ikon Lucide
+        lucide.createIcons();
+
+        // Konfiguracja Supabase - podmień URL i klucz ANON na swoje z projektu Supabase!
+        const supabaseUrl = 'https://TWOJ_PROJEKT.supabase.co';
+        const supabaseKey = 'TWOJ_KLUCZ_ANON';
+        
+        // Zabezpieczenie przed błędem, jeśli klucze nie są jeszcze podane
+        let supabase;
+        if(supabaseUrl !== 'https://TWOJ_PROJEKT.supabase.co') {
+             supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        }
+
+        // Logika Alpine.js
+        function app() {
+            return {
+                currentView: 'nowy-trade', // Początkowy widok
+                
+                // Tutaj będziemy dodawać funkcje do pobierania/zapisywania danych
+                async fetchTrades() {
+                    if(!supabase) return;
+                    const { data, error } = await supabase.from('trades').select('*');
+                    if (error) console.error('Błąd pobierania:', error);
+                    else console.log('Transakcje:', data);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
