@@ -70,12 +70,6 @@
                 <i data-lucide="bar-chart-2" class="w-4 h-4"></i> Analityka
             </button>
         </nav>
-
-        <div class="p-4 border-t border-slate-100">
-            <button class="flex items-center gap-3 px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors w-full">
-                <i data-lucide="log-out" class="w-4 h-4"></i> Wyloguj się
-            </button>
-        </div>
     </aside>
 
     <main class="ml-64 flex-1 p-10 min-h-screen bg-bg-light">
@@ -85,18 +79,15 @@
             <p class="text-[13px] text-slate-500 mb-8">Przegląd Twoich wyników tradingowych</p>
 
             <div class="grid grid-cols-4 gap-5 mb-8">
-                <!-- INTERAKTYWNA SEKCJA: KAPITAŁ POCZĄTKOWY (Z MOŻLIWOŚCIĄ EDYCJI NA STRONIE) -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex justify-between items-start">
                     <div class="w-full">
                         <p class="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Kapitał Początkowy</p>
                         
-                        <!-- Widok kwoty -->
                         <div x-show="!isEditingCapital" @click="isEditingCapital = true; setTimeout(() => $refs.capitalInput.focus(), 50)" class="flex items-center gap-2 mt-2 cursor-pointer group">
                             <h3 class="text-2xl font-bold text-slate-900" x-text="'$' + initialCapital.toFixed(2)">$10000.00</h3>
                             <i data-lucide="edit-2" class="w-3.5 h-3.5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity"></i>
                         </div>
 
-                        <!-- Widok edycji formularza -->
                         <div x-show="isEditingCapital" x-cloak class="flex items-center gap-2 mt-2">
                             <input x-ref="capitalInput" type="number" step="any" x-model="inputCapitalValue" @keydown.enter="saveCapital()" class="w-28 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-sm font-bold text-slate-900">
                             <button @click="saveCapital()" class="bg-brand-blue text-white p-1.5 rounded-lg text-xs font-semibold hover:bg-blue-700 transition-colors">Zapisz</button>
@@ -398,7 +389,6 @@
     </main>
 
     <script>
-        // ================= KONFIGURACJA SUPABASE =================
         const supabaseUrl = 'https://svmepxuwnvwyayeabdgm.supabase.co/rest/v1/'; 
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWVweHV3bnZ3eWF5ZWFiZGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDI5MTIsImV4cCI6MjA5NDc3ODkxMn0.K4a2vQ6lXFJ2f7_VGld72iApvUNr9ubnQP9O2xfv6Vc';
         
@@ -414,11 +404,10 @@
                 currentView: 'pulpit',
                 trades: [],
                 
-                // Dane sterujące kapitałem początkowym
                 initialCapital: 10000.00, 
                 isEditingCapital: false,
                 inputCapitalValue: 10000.00,
-                configRecordId: null, // Zapamięta ID rekordu z bazy danych
+                configRecordId: null,
 
                 stats: { totalPnl: 0, winRate: 0, wins: 0, losses: 0, profitFactor: '0.00', avgWin: 0 },
                 form: {
@@ -449,7 +438,6 @@
                     if (!supabaseClient) return;
 
                     try {
-                        // 1. Dynamiczne pobieranie kapitału początkowego z Supabase
                         const { data: settingsData, error: settingsError } = await supabaseClient
                             .from('account_settings')
                             .select('*')
@@ -458,10 +446,9 @@
                         if (!settingsError && settingsData && settingsData.length > 0) {
                             this.initialCapital = parseFloat(settingsData[0].initial_capital);
                             this.inputCapitalValue = this.initialCapital;
-                            this.configRecordId = settingsData[0].id; // zapisujemy ID wiersza ustawień
+                            this.configRecordId = settingsData[0].id;
                         }
 
-                        // 2. Pobieranie listy transakcji
                         const { data: tradesData, error: tradesError } = await supabaseClient
                             .from('trades')
                             .select('*')
@@ -475,7 +462,6 @@
                     }
                 },
 
-                // FUNKCJA AKTUALIZACJI KAPITAŁU W SUPABASE
                 async saveCapital() {
                     const parsedValue = parseFloat(this.inputCapitalValue);
                     if (isNaN(parsedValue) || parsedValue < 0) {
@@ -502,7 +488,6 @@
                         this.isEditingCapital = false;
                         this.calculateStats();
                         
-                        // Przerysowanie wykresów po zmianie bazy kapitałowej
                         if (this.currentView === 'pulpit' || this.currentView === 'analityka') {
                             this.renderCharts();
                         }
