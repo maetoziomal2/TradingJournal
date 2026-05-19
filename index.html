@@ -218,6 +218,7 @@
                                 <th class="py-4 px-4">P&L</th>
                                 <th class="py-4 px-4">Wynik</th>
                                 <th class="py-4 px-6 text-right">Ocena</th>
+                                <th class="py-4 px-4 text-center w-12">Akcje</th>
                             </tr>
                         </thead>
                         <tbody class="text-xs font-medium text-slate-700">
@@ -253,6 +254,11 @@
                                             </template>
                                         </div>
                                     </td>
+                                    <td class="py-4 px-4 text-center">
+        <button @click="if(confirm('Czy na pewno chcesz usunąć ten trade?')) deleteTrade(trade.id)" class="text-slate-400 hover:text-loss-red p-1 rounded-lg hover:bg-slate-100 transition-colors">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    </td>
                                 </tr>
                             </template>
                         </tbody>
@@ -276,6 +282,12 @@
                                         <span class="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded ml-1" x-text="trade.direction"></span>
                                     </div>
                                 </div>
+                                <div class="flex items-center gap-3">
+        <span :class="trade.result === 'Wygrana' ? 'text-win-green' : 'text-loss-red'" class="font-bold text-sm" x-text="(trade.pnl_pln >= 0 ? '+$' : '-$') + Math.abs(parseFloat(trade.pnl_pln)).toFixed(2)"></span>
+        <button @click="if(confirm('Czy na pewno chcesz usunąć ten trade?')) deleteTrade(trade.id)" class="text-slate-400 hover:text-loss-red p-1">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+    </div>
                                 <span :class="trade.result === 'Wygrana' ? 'text-win-green' : 'text-loss-red'" class="font-bold text-sm" x-text="(trade.pnl_pln >= 0 ? '+$' : '-$') + Math.abs(parseFloat(trade.pnl_pln)).toFixed(2)"></span>
                             </div>
                             <div class="grid grid-cols-2 gap-y-2 gap-x-4 text-[11px] font-medium bg-slate-50 p-2.5 rounded-xl">
@@ -596,7 +608,43 @@
                         execution_rating: this.form.execution_rating,
                         notes: this.form.notes,
                         entry_date: new Date().toISOString()
-                    };
+                    },
+
+                        async deleteTrade(id) {
+    try {
+        // 1. Usuwanie rekordu z Supabase (zakładam, że tabela nazywa się 'trades')
+        const { error } = await supabase
+            .from('trades')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // 2. Usunięcie lokalne z tablicy w Alpine.js, aby interfejs od razu się odświeżył
+        this.trades = this.trades.filter(t => t.id !== id);
+
+        // 3. Ponowne przeliczenie statystyk (musisz wywołać funkcję, którą masz do liczenia statystyk, np. updateStats())
+        if (typeof this.calculateStats === 'function') {
+            this.calculateStats();
+        } else if (typeof this.updateStats === 'function') {
+            this.updateStats();
+        }
+
+        // 4. Odświeżenie wykresów Chart.js, żeby krzywa kapitału natychmiast zareagowała
+        if (typeof this.updateCharts === 'function') {
+            this.updateCharts();
+        }
+
+        // 5. Inicjalizacja nowych ikon Lucide dla odświeżonej listy
+        setTimeout(() => {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }, 50);
+
+    } catch (error) {
+        console.error('Błąd podczas usuwania transakcji:', error.message);
+        alert('Nie udało się usunąć transakcji. Spróbuj ponownie.');
+    }
+};
 
                     if (supabaseClient) {
                         try {
