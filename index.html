@@ -20,6 +20,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        // BEZPIECZEŃSTWO: Sprawdź, czy użytkownik jest zalogowany
+const loggedInLocal = localStorage.getItem('isLoggedIn') === 'true';
+const loggedInSession = sessionStorage.getItem('isLoggedIn') === 'true';
+
+if (!loggedInLocal && !loggedInSession) {
+    // Jeśli nie ma flagi ani tu, ani tu -> wypad na stronę logowania
+    window.location.href = 'login.html';
+}
+        
         tailwind.config = {
             theme: {
                 extend: {
