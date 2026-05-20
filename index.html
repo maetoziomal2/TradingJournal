@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Premium Trading Journal & Dashboard</title>
+    <title>Enterprise Trading Journal & Advanced Analytics Dashboard</title>
+    
+    <!-- Biblioteki i Style -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        /* Custom Premium Themes Setup via Variables */
+        /* Konfiguracja zaawansowanych motywów kolorystycznych */
         :root, [data-theme="dark-pro"] {
             --bg-main: #0c1017;
             --bg-card: #161b26;
@@ -75,11 +77,9 @@
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
             overflow-x: hidden;
-            margin: 0;
-            padding: 0;
         }
 
         .custom-card {
@@ -101,57 +101,17 @@
             border-right: 1px solid var(--border-color);
         }
 
-        .border-theme {
-            border-color: var(--border-color);
-        }
-
-        .text-muted-theme {
-            color: var(--text-muted);
-        }
-
-        .accent-bg {
-            background-color: var(--accent);
-        }
-
-        .accent-text {
-            color: var(--accent);
-        }
-
+        .border-theme { border-color: var(--border-color); }
+        .text-muted-theme { color: var(--text-muted); }
+        .accent-bg { background-color: var(--accent); }
+        .accent-text { color: var(--accent); }
         .text-profit { color: var(--profit-color); }
         .text-loss { color: var(--loss-color); }
-        .bg-profit { background-color: var(--profit-color); }
-        .bg-loss { background-color: var(--loss-color); }
 
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-main);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent);
-        }
-
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        @media (max-width: 768px) {
-            .mobile-bottom-nav {
-                background-color: var(--bg-sidebar);
-                border-top: 1px solid var(--border-color);
-            }
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
@@ -172,6 +132,9 @@
             </button>
             <button onclick="switchTab('calendar')" id="btn-desktop-calendar" class="nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]">
                 <i class="fa-solid fa-calendar-days w-5 text-center"></i> Kalendarz
+            </button>
+            <button onclick="switchTab('analytics')" id="btn-desktop-analytics" class="nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> Zaawansowana Analityka
             </button>
             <button onclick="switchTab('settings')" id="btn-desktop-settings" class="nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]">
                 <i class="fa-solid fa-gear w-5 text-center"></i> Ustawienia
@@ -207,35 +170,35 @@
             <section id="tab-dashboard" class="tab-content space-y-6">
                 <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
                     <div class="custom-card p-4 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Kapitał Początkowy</span>
+                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Kapitał Startowy</span>
                         <div class="mt-2 flex items-baseline justify-between">
                             <span id="stat-initial-capital" class="text-lg md:text-xl font-bold">10 000</span>
-                            <span class="text-xs text-muted-theme user-currency">USD</span>
+                            <span class="text-xs text-muted-theme">USD</span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Aktualny Kapitał</span>
+                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Aktualny Stan</span>
                         <div class="mt-2 flex items-baseline justify-between">
                             <span id="stat-current-capital" class="text-lg md:text-xl font-bold">10 000</span>
-                            <span class="text-xs text-muted-theme user-currency">USD</span>
+                            <span class="text-xs text-muted-theme">USD</span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Total Profit</span>
+                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Wynik Netto</span>
                         <div class="mt-2 flex items-baseline justify-between">
                             <span id="stat-total-profit" class="text-lg md:text-xl font-bold text-profit">0</span>
-                            <span class="text-xs text-muted-theme user-currency">USD</span>
+                            <span class="text-xs text-muted-theme">USD</span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Profit %</span>
+                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Stopa Zwrotu</span>
                         <div class="mt-2 flex items-baseline justify-between">
                             <span id="stat-profit-percent" class="text-lg md:text-xl font-bold text-profit">0%</span>
                             <span class="text-xs text-muted-theme"><i class="fa-solid fa-arrow-trend-up text-profit"></i></span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Liczba Trade</span>
+                        <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Pozycje</span>
                         <div class="mt-2 flex items-baseline justify-between">
                             <span id="stat-total-trades" class="text-lg md:text-xl font-bold">0</span>
                             <span class="text-xs text-muted-theme"><i class="fa-solid fa-bolt"></i></span>
@@ -250,14 +213,14 @@
                     </div>
                 </div>
 
+                <!-- Główny Wykres Portfela -->
                 <div class="custom-card p-4 md:p-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                         <div>
-                            <h2 class="text-lg font-bold tracking-wide">Krzywa Kapitału (Equity Curve)</h2>
-                            <p class="text-xs text-muted-theme">Interaktywny podgląd wzrostu Twojego portfela</p>
+                            <h2 class="text-lg font-bold tracking-wide">Krzywa Zmiany Kapitału (Equity Curve)</h2>
+                            <p class="text-xs text-muted-theme">Podgląd historycznego wzrostu Twojego depozytu</p>
                         </div>
                         <div class="flex bg-[var(--bg-main)] p-1 rounded-lg border border-theme self-start sm:self-center">
-                            <button onclick="filterDashboardData('day')" id="filter-dash-day" class="px-3 py-1 text-xs font-medium rounded-md transition-all text-muted-theme">Dzień</button>
                             <button onclick="filterDashboardData('week')" id="filter-dash-week" class="px-3 py-1 text-xs font-medium rounded-md transition-all text-muted-theme">Tydzień</button>
                             <button onclick="filterDashboardData('month')" id="filter-dash-month" class="px-3 py-1 text-xs font-medium rounded-md transition-all text-muted-theme">Miesiąc</button>
                             <button onclick="filterDashboardData('all')" id="filter-dash-all" class="px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--text-main)] bg-[var(--bg-card)] border border-theme">Wszystko</button>
@@ -269,23 +232,23 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Lewa kolumna: Skuteczność strategii -->
                     <div class="custom-card p-4 md:p-6 lg:col-span-5 flex flex-col">
                         <div class="mb-4">
-                            <h3 class="text-base font-bold">Porównanie i Analiza Strategii</h3>
-                            <p class="text-xs text-muted-theme">Skuteczność: ATH vs FVG vs Scalping</p>
+                            <h3 class="text-base font-bold">Skuteczność Poszczególnych Strategii</h3>
+                            <p class="text-xs text-muted-theme">Wskaźniki zysków i procenty udanych transakcji</p>
                         </div>
-                        <div class="flex-1 space-y-4">
-                            <div id="strategy-analytics-container" class="space-y-4"></div>
-                        </div>
+                        <div id="strategy-analytics-container" class="space-y-4 flex-1 justify-center flex flex-col"></div>
                     </div>
 
+                    <!-- Prawa kolumna: Ostatnie transakcje -->
                     <div class="custom-card p-4 md:p-6 lg:col-span-7">
                         <div class="mb-4 flex items-center justify-between">
                             <div>
                                 <h3 class="text-base font-bold">Ostatnie Transakcje</h3>
-                                <p class="text-xs text-muted-theme">Ostatnie 5 wykonanych operacji rynkowych</p>
+                                <p class="text-xs text-muted-theme">Ostatnie 5 transakcji zarejestrowanych w systemie</p>
                             </div>
-                            <button onclick="switchTab('journal')" class="text-xs text-[var(--accent)] hover:underline">Zobacz wszystkie</button>
+                            <button onclick="switchTab('journal')" class="text-xs text-[var(--accent)] hover:underline cursor-pointer">Wszystkie pozycje</button>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs border-collapse">
@@ -293,8 +256,8 @@
                                     <tr class="border-b border-theme text-muted-theme">
                                         <th class="pb-2">Instrument</th>
                                         <th class="pb-2">Strategia</th>
-                                        <th class="pb-2">Lot</th>
-                                        <th class="pb-2 text-right">Zarobek / Strata</th>
+                                        <th class="pb-2">Wolumen (Lot)</th>
+                                        <th class="pb-2 text-right">Zysk/Strata (USD)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="dashboard-recent-trades"></tbody>
@@ -307,16 +270,17 @@
             <!-- JOURNAL TAB -->
             <section id="tab-journal" class="tab-content space-y-6 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Formularz Dodawania Pozycji -->
                     <div class="custom-card p-4 md:p-6 lg:col-span-4 self-start">
                         <div class="mb-4">
-                            <h2 id="journal-form-title" class="text-base font-bold">Dodaj Nową Transakcję</h2>
-                            <p class="text-xs text-muted-theme">Wprowadź kompletne dane pozycji</p>
+                            <h2 id="journal-form-title" class="text-base font-bold">Zarejestruj Transakcję</h2>
+                            <p class="text-xs text-muted-theme">Uzupelnij parametry zrealizowanego zlecenia</p>
                         </div>
                         <form id="trade-form" onsubmit="handleTradeSubmit(event)" class="space-y-4">
                             <input type="hidden" id="form-trade-id" value="">
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Instrument</label>
-                                <input type="text" id="form-instrument" required placeholder="np. EURUSD, BTCUSD, Apple" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Instrument handlowy</label>
+                                <input type="text" id="form-instrument" required placeholder="np. EURUSD, BTCUSD, AAPL" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
@@ -330,107 +294,147 @@
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label class="block text-xs font-semibold mb-1 text-muted-theme">Zarobek/Strata (<span class="user-currency">USD</span>)</label>
-                                    <input type="number" step="any" id="form-profit" required placeholder="+/- USD" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                    <label class="block text-xs font-semibold mb-1 text-muted-theme">Wynik (USD)</label>
+                                    <input type="number" step="any" id="form-profit" required placeholder="+/- kwota" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold mb-1 text-muted-theme">LOT Size</label>
-                                    <input type="number" step="any" id="form-lot-size" required placeholder="0.01" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                    <label class="block text-xs font-semibold mb-1 text-muted-theme">Wielkość (Lot)</label>
+                                    <input type="number" step="any" id="form-lot-size" required placeholder="np. 0.1" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Strategia</label>
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Wykorzystana Strategia</label>
                                 <select id="form-strategy" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
-                                    <option value="ATH">ATH</option>
-                                    <option value="FVG">FVG</option>
-                                    <option value="Scalping">Scalping</option>
+                                    <option value="ATH">ATH Breakoout</option>
+                                    <option value="FVG">Fair Value Gap (SMC)</option>
+                                    <option value="Scalping">Orderflow Scalping</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Data transakcji</label>
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Data księgowania</label>
                                 <input type="date" id="form-date" required class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
                             <div class="flex gap-2 pt-2">
-                                <button type="submit" id="form-submit-btn" class="flex-1 bg-[var(--accent)] hover:opacity-90 text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Dodaj Pozycję</button>
+                                <button type="submit" id="form-submit-btn" class="flex-1 bg-[var(--accent)] hover:opacity-90 text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer">Zapisz w Dzienniku</button>
                                 <button type="button" id="form-cancel-btn" onclick="resetTradeForm()" class="hidden bg-gray-600 hover:bg-gray-700 text-white font-bold px-3 py-2 rounded-lg text-xs transition-all cursor-pointer">Anuluj</button>
                             </div>
                         </form>
                     </div>
 
+                    <!-- Główna Tabela i Zaawansowane Filtrowanie -->
                     <div class="custom-card p-4 md:p-6 lg:col-span-8 flex flex-col space-y-4">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div>
-                                <h2 class="text-base font-bold">Rejestr Operacji Rynkowych</h2>
-                                <p class="text-xs text-muted-theme">Filtruj, przeglądaj oraz eksportuj dane transakcji</p>
+                                <h2 class="text-base font-bold">Rejestr Wszystkich Pozycji</h2>
+                                <p class="text-xs text-muted-theme">Przeglądanie strukturalne bazy danych tradera</p>
                             </div>
-                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 cursor-pointer transition-all">
-                                <i class="fa-solid fa-file-csv text-sm"></i> Eksportuj CSV
+                            <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 cursor-pointer transition-all">
+                                <i class="fa-solid fa-file-csv text-sm"></i> Pobierz plik CSV
                             </button>
                         </div>
 
+                        <!-- Panel filtracyjny -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[var(--bg-main)] p-3 rounded-xl border border-theme">
                             <div>
-                                <label class="block text-[10px] text-muted-theme uppercase font-bold mb-1">Filtruj wg Strategii</label>
+                                <label class="block text-[10px] text-muted-theme uppercase font-bold mb-1">Filtruj Strategię</label>
                                 <select id="filter-strategy" onchange="renderJournalTable()" class="w-full bg-[var(--bg-card)] border border-theme rounded-md p-1.5 text-xs text-[var(--text-main)]">
-                                    <option value="ALL">Wszystkie strategie</option>
+                                    <option value="ALL">Wszystkie systemy</option>
                                     <option value="ATH">ATH</option>
                                     <option value="FVG">FVG</option>
                                     <option value="Scalping">Scalping</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-[10px] text-muted-theme uppercase font-bold mb-1">Szukaj Instrumentu</label>
-                                <input type="text" id="filter-instrument" oninput="renderJournalTable()" placeholder="Wpisz np. BTC..." class="w-full bg-[var(--bg-card)] border border-theme rounded-md p-1.5 text-xs text-[var(--text-main)]">
+                                <label class="block text-[10px] text-muted-theme uppercase font-bold mb-1">Szukaj Aktywa</label>
+                                <input type="text" id="filter-instrument" oninput="renderJournalTable()" placeholder="Wpisz instrument..." class="w-full bg-[var(--bg-card)] border border-theme rounded-md p-1.5 text-xs text-[var(--text-main)]">
                             </div>
                             <div>
-                                <label class="block text-[10px] text-muted-theme uppercase font-bold mb-1">Miesiąc / Rok</label>
+                                <label class="block text-[10px] text-muted-theme uppercase font-bold mb-1">Miesiąc operacyjny</label>
                                 <input type="month" id="filter-date" onchange="renderJournalTable()" class="w-full bg-[var(--bg-card)] border border-theme rounded-md p-1.5 text-xs text-[var(--text-main)]">
                             </div>
                         </div>
 
+                        <!-- Statystyki bieżącego widoku -->
                         <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs bg-[var(--bg-sidebar)] p-3 rounded-xl border border-theme">
                             <div>
-                                <p class="text-muted-theme font-medium text-[10px] uppercase">W/L Skuteczność</p>
+                                <p class="text-muted-theme text-[10px] uppercase font-medium">Bieżący Winrate</p>
                                 <p id="journal-calc-winrate" class="font-bold text-base accent-text">0%</p>
                             </div>
                             <div>
-                                <p class="text-muted-theme font-medium text-[10px] uppercase">Średni Profit</p>
+                                <p class="text-muted-theme text-[10px] uppercase font-medium">Średni Zysk</p>
                                 <p id="journal-calc-avg-profit" class="font-bold text-base text-profit">0.00</p>
                             </div>
                             <div>
-                                <p class="text-muted-theme font-medium text-[10px] uppercase">Średnia Strata</p>
+                                <p class="text-muted-theme text-[10px] uppercase font-medium">Średnia Strata</p>
                                 <p id="journal-calc-avg-loss" class="font-bold text-base text-loss">0.00</p>
                             </div>
                             <div>
-                                <p class="text-muted-theme font-medium text-[10px] uppercase">Profit Factor</p>
+                                <p class="text-muted-theme text-[10px] uppercase font-medium">Profit Factor</p>
                                 <p id="journal-calc-pf" class="font-bold text-base text-[var(--text-main)]">0.00</p>
                             </div>
                             <div class="col-span-2 sm:col-span-1">
-                                <p class="text-muted-theme font-medium text-[10px] uppercase">Bilans Sumaryczny</p>
+                                <p class="text-muted-theme text-[10px] uppercase font-medium">Bilans Filtru</p>
                                 <p id="journal-calc-total" class="font-bold text-base">0.00</p>
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto flex-1 min-h-[300px]">
+                        <!-- Tabela właściwa -->
+                        <div class="overflow-x-auto flex-1 min-h-[350px]">
                             <table class="w-full text-left text-xs border-collapse">
                                 <thead>
-                                    <tr class="border-b border-theme text-muted-theme uppercase tracking-wider text-[10px]">
+                                    <tr class="border-b border-theme text-muted-theme text-[10px] uppercase tracking-wider">
                                         <th class="py-3 px-2">Data</th>
                                         <th class="py-3 px-2">Instrument</th>
                                         <th class="py-3 px-2">Strategia</th>
                                         <th class="py-3 px-2">Wejście</th>
                                         <th class="py-3 px-2">Wyjście</th>
-                                        <th class="py-3 px-2">LOT</th>
-                                        <th class="py-3 px-2 text-right">Zarobek (<span class="user-currency">USD</span>)</th>
-                                        <th class="py-3 px-2 text-center">Akcje</th>
+                                        <th class="py-3 px-2">Lot</th>
+                                        <th class="py-3 px-2 text-right">Zysk/Strata</th>
+                                        <th class="py-3 px-2 text-center">Zarządzanie</th>
                                     </tr>
                                 </thead>
                                 <tbody id="journal-table-body"></tbody>
                             </table>
                             <div id="journal-empty-state" class="text-center py-12 text-muted-theme hidden">
-                                <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
-                                Brak transakcji spełniających kryteria wyboru.
+                                <i class="fa-solid fa-receipt text-3xl mb-2 block"></i>
+                                Brak transakcji spełniających kryteria wyszukiwania.
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ADVANCED ANALYTICS TAB -->
+            <section id="tab-analytics" class="tab-content space-y-6 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="custom-card p-4">
+                        <h4 class="text-xs text-muted-theme font-bold uppercase tracking-wider">Współczynnik Matematyczny (Expectancy)</h4>
+                        <p id="analytics-expectancy" class="text-2xl font-black mt-2">0.00 USD</p>
+                        <p class="text-[10px] text-muted-theme mt-1">Średnia oczekiwana wartość zysku/straty na pojedynczy trade.</p>
+                    </div>
+                    <div class="custom-card p-4">
+                        <h4 class="text-xs text-muted-theme font-bold uppercase tracking-wider">Maksymalne Obsunięcie (Max Drawdown)</h4>
+                        <p id="analytics-drawdown" class="text-2xl font-black mt-2 text-loss">0.00 USD</p>
+                        <p class="text-[10px] text-muted-theme mt-1">Największy spadek kapitału od szczytu do dołka.</p>
+                    </div>
+                    <div class="custom-card p-4">
+                        <h4 class="text-xs text-muted-theme font-bold uppercase tracking-wider">Wskaźnik Zysk/Ryzyko (Ratio)</h4>
+                        <p id="analytics-win-loss-ratio" class="text-2xl font-black mt-2 accent-text">1:0</p>
+                        <p class="text-[10px] text-muted-theme mt-1">Stosunek wielkości przeciętnego zysku do straty.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="custom-card p-5">
+                        <h3 class="text-sm font-bold mb-4">Rozkład Wyników w Formie Wolumenu</h3>
+                        <div class="h-64 relative">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="custom-card p-5">
+                        <h3 class="text-sm font-bold mb-4">Zestawienie Miesięczne Wyników Giełdowych</h3>
+                        <div class="h-64 relative">
+                            <canvas id="monthlyBarChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -441,36 +445,27 @@
                 <div class="custom-card p-4 md:p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h2 class="text-lg font-bold tracking-wide">Kalendarz Wyników Trader</h2>
-                            <p class="text-xs text-muted-theme">Dniówka finansowa ustrukturyzowana miesięcznie</p>
+                            <h2 class="text-lg font-bold tracking-wide">Miesięczny Kalendarz Wyników</h2>
+                            <p class="text-xs text-muted-theme">Podsumowanie dzienne Twoich zamkniętych pozycji</p>
                         </div>
                         <div class="flex items-center gap-3 bg-[var(--bg-main)] px-3 py-1.5 rounded-lg border border-theme">
                             <button onclick="changeMonth(-1)" class="p-1 hover:text-[var(--accent)] transition-all cursor-pointer"><i class="fa-solid fa-chevron-left"></i></button>
-                            <span id="calendar-month-year" class="text-xs font-bold uppercase tracking-wider min-w-[120px] text-center">Maj 2026</span>
+                            <span id="calendar-month-year" class="text-xs font-bold uppercase tracking-wider min-w-[125px] text-center">Maj 2026</span>
                             <button onclick="changeMonth(1)" class="p-1 hover:text-[var(--accent)] transition-all cursor-pointer"><i class="fa-solid fa-chevron-right"></i></button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-7 gap-2 text-center text-xs font-bold text-muted-theme border-b border-theme pb-2 mb-2">
-                        <div>Pn</div>
-                        <div>Wt</div>
-                        <div>Śr</div>
-                        <div>Cz</div>
-                        <div>Pt</div>
-                        <div>So</div>
-                        <div>Nd</div>
+                        <div>Pon</div><div>Wt</div><div>Śr</div><div>Cz</div><div>Pt</div><div>So</div><div>Nd</div>
                     </div>
-
-                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 dynamic-calendar-cells min-h-[350px]"></div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 min-h-[350px]"></div>
                 </div>
 
+                <!-- Modal kalendarza wyświetlany bezpośrednio pod nim -->
                 <div id="calendar-day-modal" class="custom-card p-4 md:p-6 hidden">
                     <div class="flex items-center justify-between border-b border-theme pb-3 mb-4">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-circle-info accent-text"></i>
-                            <h3 class="font-bold text-sm">Transakcje z dnia: <span id="cal-modal-date" class="accent-text">2026-05-20</span></h3>
-                        </div>
-                        <button onclick="closeCalendarModal()" class="text-muted-theme hover:text-[var(--text-main)] text-sm"><i class="fa-solid fa-xmark"></i> Zamknij</button>
+                        <h3 class="font-bold text-sm">Transakcje sfinalizowane: <span id="cal-modal-date" class="accent-text"></span></h3>
+                        <button onclick="closeCalendarModal()" class="text-muted-theme hover:text-[var(--text-main)] text-xs cursor-pointer"><i class="fa-solid fa-xmark"></i> Zamknij</button>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs">
@@ -478,40 +473,40 @@
                                 <tr class="text-muted-theme border-b border-theme">
                                     <th class="pb-2">Instrument</th>
                                     <th class="pb-2">Strategia</th>
-                                    <th class="pb-2">Cena Wejścia/Wyjścia</th>
-                                    <th class="pb-2">LOT</th>
-                                    <th class="pb-2 text-right">Zarobek / Strata</th>
+                                    <th class="pb-2">Ceny In/Out</th>
+                                    <th class="pb-2">Lot</th>
+                                    <th class="pb-2 text-right">Zysk/Strata</th>
                                 </tr>
-                            </table>
+                            </thead>
                             <tbody id="cal-modal-table-body"></tbody>
-                        </div>
+                        </table>
                     </div>
                 </div>
             </section>
 
-            <!-- SETTINGS TAB (Naprawiony i domknięty formularz) -->
+            <!-- SETTINGS TAB -->
             <section id="tab-settings" class="tab-content space-y-6 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="custom-card p-4 md:p-6 space-y-4">
                         <div>
-                            <h2 class="text-base font-bold">Ustawienia Profilu Tradera</h2>
-                            <p class="text-xs text-muted-theme">Skonfiguruj parametry swojego konta operacyjnego</p>
+                            <h2 class="text-base font-bold">Ustawienia Środowiska Handlowego</h2>
+                            <p class="text-xs text-muted-theme">Dostosuj podstawowe parametry globalne aplikacji</p>
                         </div>
                         <div class="space-y-3">
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Nazwa Handlowca / ID</label>
-                                <input type="text" id="set-profile-name" value="Trader Pro Account" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Nazwa Profilu / ID Rachunku</label>
+                                <input type="text" id="set-profile-name" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Kapitał Początkowy Operacyjny</label>
-                                <input type="number" step="any" id="set-initial-capital" value="10000" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Kapitał Początkowy Depozytu</label>
+                                <input type="number" step="any" id="set-initial-capital" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Broker giełdowy</label>
-                                <input type="text" id="set-broker" value="TradingView Broker" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Główny Broker</label>
+                                <input type="text" id="set-broker" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Motyw kolorystyczny</label>
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Styl interfejsu (Visual Theme)</label>
                                 <select id="set-theme" onchange="applyTheme(this.value)" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                                     <option value="dark-pro">Dark Pro</option>
                                     <option value="cyber-blue">Cyber Blue</option>
@@ -522,7 +517,7 @@
                             </div>
                             <div class="pt-2">
                                 <button onclick="saveSettings()" id="btn-save-settings" class="w-full bg-[var(--accent)] hover:opacity-90 text-white font-bold py-2.5 rounded-lg text-xs transition-all cursor-pointer">
-                                    <i class="fa-solid fa-floppy-disk mr-2"></i> Zapisz Ustawienia
+                                    <i class="fa-solid fa-floppy-disk mr-2"></i> Zapisz i zsynchronizuj konfigurację
                                 </button>
                             </div>
                         </div>
@@ -535,102 +530,97 @@
     <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="md:hidden mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center py-2">
         <button onclick="switchTab('dashboard')" id="btn-mobile-dashboard" class="flex flex-col items-center gap-1 text-[var(--accent)] text-xs">
-            <i class="fa-solid fa-gauge text-lg"></i>
-            <span>Główna</span>
+            <i class="fa-solid fa-gauge text-lg"></i><span>Główna</span>
         </button>
         <button onclick="switchTab('journal')" id="btn-mobile-journal" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
-            <i class="fa-solid fa-book text-lg"></i>
-            <span>Dziennik</span>
+            <i class="fa-solid fa-book text-lg"></i><span>Dziennik</span>
         </button>
         <button onclick="switchTab('calendar')" id="btn-mobile-calendar" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
-            <i class="fa-solid fa-calendar-days text-lg"></i>
-            <span>Kalendarz</span>
+            <i class="fa-solid fa-calendar-days text-lg"></i><span>Kalendarz</span>
+        </button>
+        <button onclick="switchTab('analytics')" id="btn-mobile-analytics" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
+            <i class="fa-solid fa-chart-pie text-lg"></i><span>Analityka</span>
         </button>
         <button onclick="switchTab('settings')" id="btn-mobile-settings" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
-            <i class="fa-solid fa-gear text-lg"></i>
-            <span>Ustawienia</span>
+            <i class="fa-solid fa-gear text-lg"></i><span>Ustawienia</span>
         </button>
     </nav>
 
-    <!-- ENGINE SCRIPTS -->
+    <!-- SILNIK LOGICZNY JAVASCRIPT -->
     <script>
-        // --- KONFIGURACJA SUPABASE ---
-        // Tutaj wpisz swoje poprawne dane URL i KLUCZA z ustawień Supabase API
-        const SUPABASE_URL = "https://svmepxuwnvwyayeabdgm.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWVweHV3bnZ3eWF5ZWFiZGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDI5MTIsImV4cCI6MjA5NDc3ODkxMn0.K4a2vQ6lXFJ2f7_VGld72iApvUNr9ubnQP9O2xfv6Vc";
+        // --- POŁĄCZENIE Z BAZĄ SUPABASE ---
+        const SUPABASE_URL = "https://svmepxuwnvwyayeabdgm.supabase.co"; // Wklej swój URL
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWVweHV3bnZ3eWF5ZWFiZGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDI5MTIsImV4cCI6MjA5NDc3ODkxMn0.K4a2vQ6lXFJ2f7_VGld72iApvUNr9ubnQP9O2xfv6Vc"; // Wklej swój Klucz
 
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // --- STAN APLIKACJI ---
+        // --- GLOBALNY STAN RACHUNKU ---
         let tradesData = [];
-        let currentSettings = {
-            profile_name: "Trader Pro Account",
-            initial_capital: 10000,
-            broker: "TradingView Broker",
-            theme: "dark-pro"
-        };
+        let currentSettings = { profile_name: "Trader Pro Account", initial_capital: 10000, broker: "TradingView", theme: "dark-pro" };
         let currentDashboardFilter = 'all';
-        let currentCalendarDate = new Date(2026, 4, 1); // Ustawiony maj 2026 r.
-        let myChartInstance = null;
+        let currentCalendarDate = new Date(2026, 4, 1); // Sztywna inicjalizacja na Maj 2026 r.
+        
+        // Instancje wykresów (Chart.js)
+        let chartEquity = null;
+        let chartDistribution = null;
+        let chartMonthlyBar = null;
 
-        // --- INICJALIZACJA ---
+        // --- CYKL ŻYCIA APLIKACJI ---
         window.addEventListener('DOMContentLoaded', async () => {
-            updateSyncStatus(false, "Łączenie...");
+            setSyncingState(false, "Pobieranie...");
             await loadSettings();
             await loadTrades();
-            updateSyncStatus(true, "Zsynchronizowano");
+            setSyncingState(true, "Zsynchronizowano");
+            
+            // Ustawienie domyślnej daty dzisiejszej w formularzu
+            document.getElementById('form-date').value = new Date().toISOString().split('T')[0];
         });
 
-        function updateSyncStatus(connected, text) {
-            const iconD = document.getElementById('sync-status-icon');
-            const textD = document.getElementById('sync-status-text');
-            const iconM = document.getElementById('mobile-sync-icon');
-            const textM = document.getElementById('mobile-sync-text');
-            
-            if(connected) {
-                if(iconD) iconD.className = "w-3 h-3 rounded-full bg-emerald-500";
-                if(iconM) iconM.className = "w-2 h-2 rounded-full bg-emerald-500";
-            } else {
-                if(iconD) iconD.className = "w-3 h-3 rounded-full bg-amber-500";
-                if(iconM) iconM.className = "w-2 h-2 rounded-full bg-amber-500";
-            }
-            if(textD) textD.innerText = text;
-            if(textM) textM.innerText = text;
+        function setSyncingState(ok, msg) {
+            const iD = document.getElementById('sync-status-icon');
+            const tD = document.getElementById('sync-status-text');
+            const iM = document.getElementById('mobile-sync-icon');
+            const tM = document.getElementById('mobile-sync-text');
+            const statusColor = ok ? "bg-emerald-500" : "bg-amber-500";
+
+            if(iD) iD.className = `w-3 h-3 rounded-full ${statusColor}`;
+            if(iM) iM.className = `w-2 h-2 rounded-full ${statusColor}`;
+            if(tD) tD.innerText = msg;
+            if(tM) tM.innerText = msg;
         }
 
-        // --- OBSŁUGA NABIGACJI ---
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+        // --- MODUŁ ZARZĄDZANIA WIDOKAMI (TABS) ---
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.getElementById(`tab-${id}`).classList.remove('hidden');
 
-            // Aktywacja stylów przycisków na desktopie
-            document.querySelectorAll('.sidebar .nav-item').forEach(btn => {
-                btn.className = "nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]";
+            // Aktualizacja klas paska desktopowego
+            document.querySelectorAll('.sidebar .nav-item').forEach(b => {
+                b.className = "nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]";
             });
-            const activeDeskBtn = document.getElementById(`btn-desktop-${tabId}`);
-            if(activeDeskBtn) activeDeskBtn.className = "nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-main)] bg-[var(--border-color)]";
+            const dBtn = document.getElementById(`btn-desktop-${id}`);
+            if(dBtn) dBtn.className = "nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-main)] bg-[var(--border-color)]";
 
-            // Aktywacja stylów przycisków na telefonie
-            document.querySelectorAll('.mobile-bottom-nav button').forEach(btn => {
-                btn.className = "flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs";
+            // Aktualizacja paska mobilnego
+            document.querySelectorAll('.mobile-bottom-nav button').forEach(b => {
+                b.className = "flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs";
             });
-            const activeMobBtn = document.getElementById(`btn-mobile-${tabId}`);
-            if(activeMobBtn) activeMobBtn.className = "flex flex-col items-center gap-1 text-[var(--accent)] text-xs";
+            const mBtn = document.getElementById(`btn-mobile-${id}`);
+            if(mBtn) mBtn.className = "flex flex-col items-center gap-1 text-[var(--accent)] text-xs";
 
-            if (tabId === 'dashboard') {
-                setTimeout(renderCharts, 50);
-            } else if (tabId === 'calendar') {
-                renderCalendar();
-            }
+            // Odświeżenie specyficznych elementów graficznych widoku
+            if(id === 'dashboard') { setTimeout(renderEquityChart, 50); }
+            else if(id === 'analytics') { setTimeout(renderAdvancedAnalytics, 50); }
+            else if(id === 'calendar') { renderCalendar(); }
         }
 
-        // --- OBSŁUGA BAZY DANYCH (SUPABASE) ---
+        // --- SYNCHRONIZACJA Z SUPABASE ---
         async function loadSettings() {
             try {
                 const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
                 if (error) throw error;
-                if (data) {
+                if(data) {
                     currentSettings = data;
                     document.getElementById('set-profile-name').value = data.profile_name;
                     document.getElementById('set-initial-capital').value = data.initial_capital;
@@ -638,63 +628,51 @@
                     document.getElementById('set-theme').value = data.theme;
                     applyTheme(data.theme);
                 }
-            } catch (err) {
-                console.error("Błąd ładowania ustawień:", err);
-            }
+            } catch (x) { console.error("Settings Fetch Error:", x); }
         }
 
         async function saveSettings() {
             const btn = document.getElementById('btn-save-settings');
-            btn.disabled = true;
-            btn.innerText = "Zapisywanie...";
+            btn.disabled = true; btn.innerText = "Synchronizacja...";
             
-            const profile_name = document.getElementById('set-profile-name').value;
-            const initial_capital = parseFloat(document.getElementById('set-initial-capital').value) || 0;
-            const broker = document.getElementById('set-broker').value;
-            const theme = document.getElementById('set-theme').value;
+            const payload = {
+                id: 1,
+                profile_name: document.getElementById('set-profile-name').value,
+                initial_capital: parseFloat(document.getElementById('set-initial-capital').value) || 0,
+                broker: document.getElementById('set-broker').value,
+                theme: document.getElementById('set-theme').value
+            };
 
             try {
-                const { error } = await supabaseClient.from('settings').upsert({
-                    id: 1, profile_name, initial_capital, broker, theme
-                });
-                if (error) throw error;
-                
-                currentSettings = { profile_name, initial_capital, broker, theme };
-                applyTheme(theme);
-                calculateStats();
-                alert("Ustawienia zostały zapisane i zsynchronizowane!");
-            } catch (err) {
-                alert("Błąd zapisu danych w chmurze.");
-                console.error(err);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fa-solid fa-floppy-disk mr-2"></i> Zapisz Ustawienia`;
-            }
+                const { error } = await supabaseClient.from('settings').upsert(payload);
+                if(error) throw error;
+                currentSettings = payload;
+                calculateCoreStatistics();
+                alert("Konfiguracja zsynchronizowana pomyślnie na wszystkich urządzeniach!");
+            } catch(x) { alert("Błąd zapisu danych."); console.error(x); }
+            finally { btn.disabled = false; btn.innerHTML = `<i class="fa-solid fa-floppy-disk mr-2"></i> Zapisz i zsynchronizuj konfigurację`; }
         }
 
         function applyTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            setTimeout(renderCharts, 100);
         }
 
         async function loadTrades() {
             try {
                 const { data, error } = await supabaseClient.from('trades').select('*').order('date', { ascending: true });
-                if (error) throw error;
+                if(error) throw error;
                 tradesData = data || [];
-                calculateStats();
+                calculateCoreStatistics();
                 renderDashboardRecentTrades();
                 renderJournalTable();
-            } catch (err) {
-                console.error("Błąd ładowania transakcji:", err);
-            }
+            } catch(x) { console.error("Trades Fetch Error:", x); }
         }
 
         async function handleTradeSubmit(e) {
             e.preventDefault();
             const id = document.getElementById('form-trade-id').value;
-            const tradePayload = {
-                instrument: document.getElementById('form-instrument').value,
+            const payload = {
+                instrument: document.getElementById('form-instrument').value.toUpperCase(),
                 entry_price: parseFloat(document.getElementById('form-entry-price').value),
                 exit_price: parseFloat(document.getElementById('form-exit-price').value),
                 profit: parseFloat(document.getElementById('form-profit').value),
@@ -703,99 +681,86 @@
                 date: document.getElementById('form-date').value
             };
 
-            updateSyncStatus(false, "Wysyłanie...");
+            setSyncingState(false, "Zapisywanie...");
             try {
                 if(id) {
-                    const { error } = await supabaseClient.from('trades').update(tradePayload).eq('id', id);
-                    if (error) throw error;
+                    const { error } = await supabaseClient.from('trades').update(payload).eq('id', id);
+                    if(error) throw error;
                 } else {
-                    const { error } = await supabaseClient.from('trades').insert([tradePayload]);
-                    if (error) throw error;
+                    const { error } = await supabaseClient.from('trades').insert([payload]);
+                    if(error) throw error;
                 }
                 resetTradeForm();
                 await loadTrades();
-                updateSyncStatus(true, "Zsynchronizowano");
-            } catch(err) {
-                alert("Nie udało się zapisać transakcji.");
-                console.error(err);
-            }
+                setSyncingState(true, "Zsynchronizowano");
+            } catch(x) { alert("Wystąpił problem z bazą danych."); console.error(x); }
         }
 
         async function deleteTrade(id) {
-            if(!confirm("Czy na pewno chcesz usunąć tę transakcję?")) return;
-            updateSyncStatus(false, "Usuwanie...");
+            if(!confirm("Usunąć bezpowrotnie wskazaną pozycję z bazy danych?")) return;
+            setSyncingState(false, "Usuwanie...");
             try {
                 const { error } = await supabaseClient.from('trades').delete().eq('id', id);
-                if (error) throw error;
+                if(error) throw error;
                 await loadTrades();
-                updateSyncStatus(true, "Zsynchronizowano");
-            } catch(err) {
-                console.error(err);
-            }
+                setSyncingState(true, "Zsynchronizowano");
+            } catch(x) { console.error(x); }
         }
 
-        // --- APALITYKA I KALKULACJE ---
-        function calculateStats() {
-            const initCap = currentSettings.initial_capital;
-            document.getElementById('stat-initial-capital').innerText = initCap.toLocaleString('pl-PL');
+        // --- MATEMATYCZNE OBLICZENIA I STATYSTYKI ---
+        function calculateCoreStatistics() {
+            const capStart = currentSettings.initial_capital;
+            document.getElementById('stat-initial-capital').innerText = capStart.toLocaleString('pl-PL');
 
-            let totalProfit = 0;
-            let wins = 0;
-            let tradesCount = tradesData.length;
-
+            let netto = 0, wygrane = 0, tradesCount = tradesData.length;
             tradesData.forEach(t => {
-                totalProfit += t.profit;
-                if(t.profit > 0) wins++;
+                netto += t.profit;
+                if(t.profit > 0) wygrane++;
             });
 
-            const currentCap = initCap + totalProfit;
-            const profitPct = initCap > 0 ? (totalProfit / initCap) * 100 : 0;
-            const winrate = tradesCount > 0 ? (wins / tradesCount) * 100 : 0;
+            const capAktualny = capStart + netto;
+            const procentZwrotu = capStart > 0 ? (netto / capStart) * 100 : 0;
+            const wr = tradesCount > 0 ? (wygrane / tradesCount) * 100 : 0;
 
-            document.getElementById('stat-current-capital').innerText = currentCap.toLocaleString('pl-PL');
+            document.getElementById('stat-current-capital').innerText = capAktualny.toLocaleString('pl-PL');
             
-            const profEl = document.getElementById('stat-total-profit');
-            profEl.innerText = (totalProfit >= 0 ? "+" : "") + totalProfit.toLocaleString('pl-PL');
-            profEl.className = `text-lg md:text-xl font-bold ${totalProfit >= 0 ? 'text-profit' : 'text-loss'}`;
+            const tfEl = document.getElementById('stat-total-profit');
+            tfEl.innerText = (netto >= 0 ? "+" : "") + netto.toLocaleString('pl-PL');
+            tfEl.className = `text-lg md:text-xl font-bold ${netto >= 0 ? 'text-profit' : 'text-loss'}`;
 
             const pctEl = document.getElementById('stat-profit-percent');
-            pctEl.innerText = (profitPct >= 0 ? "+" : "") + profitPct.toFixed(1) + "%";
-            pctEl.className = `text-lg md:text-xl font-bold ${profitPct >= 0 ? 'text-profit' : 'text-loss'}`;
+            pctEl.innerText = (procentZwrotu >= 0 ? "+" : "") + procentZwrotu.toFixed(2) + "%";
+            pctEl.className = `text-lg md:text-xl font-bold ${procentZwrotu >= 0 ? 'text-profit' : 'text-loss'}`;
 
             document.getElementById('stat-total-trades').innerText = tradesCount;
-            document.getElementById('stat-winrate').innerText = winrate.toFixed(1) + "%";
+            document.getElementById('stat-winrate').innerText = wr.toFixed(1) + "%";
 
-            renderStrategyAnalytics();
+            renderStrategyBars();
         }
 
-        function renderStrategyAnalytics() {
+        function renderStrategyBars() {
             const container = document.getElementById('strategy-analytics-container');
             if(!container) return;
-            
-            const strategies = ['ATH', 'FVG', 'Scalping'];
             container.innerHTML = '';
 
-            strategies.forEach(strat => {
-                const stratTrades = tradesData.filter(t => t.strategy === strat);
-                let profit = 0;
-                let wins = 0;
-                stratTrades.forEach(t => {
-                    profit += t.profit;
-                    if(t.profit > 0) wins++;
-                });
-                const wr = stratTrades.length > 0 ? (wins / stratTrades.length) * 100 : 0;
+            const systemy = ['ATH', 'FVG', 'Scalping'];
+            systemy.forEach(sys => {
+                const pozycje = tradesData.filter(t => t.strategy === sys);
+                let profit = 0, wins = 0;
+                pozycje.forEach(t => { profit += t.profit; if(t.profit > 0) wins++; });
+                const wr = pozycje.length > 0 ? (wins / pozycje.length) * 100 : 0;
 
                 container.innerHTML += `
                     <div>
                         <div class="flex justify-between text-xs mb-1">
-                            <span class="font-semibold">${strat} (${stratTrades.length} pozycji)</span>
-                            <span class="${profit >= 0 ? 'text-profit' : 'text-loss'} font-bold">${profit >= 0 ? '+' : ''}${profit.toFixed(2)} USD</span>
+                            <span class="font-bold">${sys} (${pozycje.length} transakcji)</span>
+                            <span class="${profit >= 0 ? 'text-profit' : 'text-loss'} font-black">${profit >= 0 ? '+' : ''}${profit.toFixed(2)} USD</span>
                         </div>
-                        <div class="w-full bg-[var(--bg-main)] h-2 rounded-full overflow-hidden border border-theme">
-                            <div class="accent-bg h-full" style="width: ${wr}%"></div>
+                        <div class="w-full bg-[var(--bg-main)] h-2 rounded-full border border-theme overflow-hidden">
+                            <div class="accent-bg h-full transition-all" style="width: ${wr}%"></div>
                         </div>
-                        <div class="flex justify-between text-[10px] text-muted-theme mt-0.5">
-                            <span>Winrate</span>
+                        <div class="flex justify-between text-[10px] text-muted-theme mt-1">
+                            <span>Współczynnik zwycięstw</span>
                             <span>${wr.toFixed(1)}%</span>
                         </div>
                     </div>
@@ -805,179 +770,171 @@
 
         function renderDashboardRecentTrades() {
             const tbody = document.getElementById('dashboard-recent-trades');
-            if(!tbody) return;
-            tbody.innerHTML = '';
-            
-            const recents = [...tradesData].substring ? [] : tradesData.slice(-5).reverse();
-            recents.forEach(t => {
+            if(!tbody) return; tbody.innerHTML = '';
+
+            const ostatnie = [...tradesData].slice(-5).reverse();
+            ostatnie.forEach(t => {
                 tbody.innerHTML += `
-                    <tr class="border-b border-theme/50 hover:bg-[var(--bg-sidebar)]/30">
-                        <td class="py-2.5 font-medium">${t.instrument}</td>
-                        <td class="py-2.5 text-muted-theme">${t.strategy}</td>
-                        <td class="py-2.5">${t.lot_size}</td>
-                        <td class="py-2.5 text-right font-bold ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
+                    <tr class="border-b border-theme/40 hover:bg-[var(--bg-sidebar)]/20">
+                        <td class="py-2.5 font-bold">${t.instrument}</td>
+                        <td class="py-2.5 text-muted-theme text-[11px]">${t.strategy}</td>
+                        <td class="py-2.5 font-mono">${t.lot_size}</td>
+                        <td class="py-2.5 text-right font-black ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
                     </tr>
                 `;
             });
         }
 
-        // --- INTERFEJS DZIENNIKA ---
+        // --- PRZETWARZANIE DANYCH TABELI (JOURNAL) ---
         function renderJournalTable() {
             const tbody = document.getElementById('journal-table-body');
-            const emptyState = document.getElementById('journal-empty-state');
+            const empty = document.getElementById('journal-empty-state');
             if(!tbody) return;
 
             const fStrat = document.getElementById('filter-strategy').value;
             const fInst = document.getElementById('filter-instrument').value.toUpperCase();
             const fDate = document.getElementById('filter-date').value;
 
-            let filtered = tradesData.filter(t => {
+            let daneWyfiltrowane = tradesData.filter(t => {
                 if(fStrat !== 'ALL' && t.strategy !== fStrat) return false;
-                if(fInst && !t.instrument.toUpperCase().includes(fInst)) return false;
+                if(fInst && !t.instrument.includes(fInst)) return false;
                 if(fDate && !t.date.startsWith(fDate)) return false;
                 return true;
             });
 
             tbody.innerHTML = '';
-            if(filtered.length === 0) {
-                emptyState.classList.remove('hidden');
+            if(daneWyfiltrowane.length === 0) {
+                empty.classList.remove('hidden');
                 updateJournalCalculations([]);
                 return;
             }
-            emptyState.classList.add('hidden');
+            empty.classList.add('hidden');
 
-            filtered.forEach(t => {
+            daneWyfiltrowane.forEach(t => {
                 tbody.innerHTML += `
-                    <tr class="border-b border-theme hover:bg-[var(--bg-sidebar)]/50 transition-all">
-                        <td class="py-3 px-2 whitespace-nowrap">${t.date}</td>
-                        <td class="py-3 px-2 font-bold">${t.instrument}</td>
-                        <td class="py-3 px-2"><span class="px-2 py-0.5 bg-[var(--bg-main)] border border-theme rounded text-[10px]">${t.strategy}</span></td>
-                        <td class="py-3 px-2 text-muted-theme">${t.entry_price}</td>
-                        <td class="py-3 px-2 text-muted-theme">${t.exit_price}</td>
-                        <td class="py-3 px-2">${t.lot_size}</td>
-                        <td class="py-3 px-2 text-right font-bold ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
-                        <td class="py-3 px-2 text-center space-x-1 whitespace-nowrap">
-                            <button onclick="editTrade('${t.id}')" class="text-blue-400 hover:text-blue-300 p-1 cursor-pointer"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteTrade('${t.id}')" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                    <tr class="border-b border-theme hover:bg-[var(--bg-sidebar)]/30 transition-all">
+                        <td class="py-3 px-2 font-mono text-[11px]">${t.date}</td>
+                        <td class="py-3 px-2 font-black tracking-wide text-[13px]">${t.instrument}</td>
+                        <td class="py-3 px-2"><span class="px-2 py-0.5 bg-[var(--bg-main)] border border-theme rounded text-[10px] font-semibold">${t.strategy}</span></td>
+                        <td class="py-3 px-2 text-muted-theme font-mono">${t.entry_price}</td>
+                        <td class="py-3 px-2 text-muted-theme font-mono">${t.exit_price}</td>
+                        <td class="py-3 px-2 font-mono">${t.lot_size}</td>
+                        <td class="py-3 px-2 text-right font-black tracking-wide text-[13px] ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
+                        <td class="py-3 px-2 text-center space-x-2 whitespace-nowrap">
+                            <button onclick="editTrade('${t.id}')" class="text-blue-400 hover:text-blue-300 p-1 cursor-pointer transition-colors"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteTrade('${t.id}')" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer transition-colors"><i class="fa-solid fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
             });
 
-            updateJournalCalculations(filtered);
+            updateJournalCalculations(daneWyfiltrowane);
         }
 
-        function updateJournalCalculations(list) {
-            let total = 0, wins = 0, totalLoss = 0, totalGain = 0, winsCount = 0, lossCount = 0;
-            list.forEach(t => {
-                total += t.profit;
-                if(t.profit > 0) {
-                    winsCount++;
-                    totalGain += t.profit;
-                } else {
-                    lossCount++;
-                    totalLoss += Math.abs(t.profit);
-                }
+        function updateJournalCalculations(lista) {
+            let zyskSuma = 0, strataSuma = 0, bilans = 0, wCount = 0, lCount = 0;
+            lista.forEach(t => {
+                bilans += t.profit;
+                if(t.profit > 0) { wCount++; zyskSuma += t.profit; }
+                else { lCount++; strataSuma += Math.abs(t.profit); }
             });
 
-            const wr = list.length > 0 ? (winsCount / list.length) * 100 : 0;
-            const avgProfit = winsCount > 0 ? totalGain / winsCount : 0;
-            const avgLoss = lossCount > 0 ? totalLoss / lossCount : 0;
-            const pf = totalLoss > 0 ? totalGain / totalLoss : totalGain > 0 ? totalGain : 0;
+            const wr = lista.length > 0 ? (wCount / lista.length) * 100 : 0;
+            const avgW = wCount > 0 ? zyskSuma / wCount : 0;
+            const avgL = lCount > 0 ? strataSuma / lCount : 0;
+            const pf = strataSuma > 0 ? zyskSuma / strataSuma : zyskSuma > 0 ? zyskSuma : 0;
 
             document.getElementById('journal-calc-winrate').innerText = wr.toFixed(1) + "%";
-            document.getElementById('journal-calc-avg-profit').innerText = avgProfit.toFixed(2);
-            document.getElementById('journal-calc-avg-loss').innerText = avgLoss.toFixed(2);
+            document.getElementById('journal-calc-avg-profit').innerText = avgW.toFixed(2);
+            document.getElementById('journal-calc-avg-loss').innerText = avgL.toFixed(2);
             document.getElementById('journal-calc-pf').innerText = pf.toFixed(2);
             
-            const totEl = document.getElementById('journal-calc-total');
-            totEl.innerText = total.toFixed(2);
-            totEl.className = `font-bold text-base ${total >= 0 ? 'text-profit' : 'text-loss'}`;
+            const totalBox = document.getElementById('journal-calc-total');
+            totalBox.innerText = bilans.toFixed(2);
+            totalBox.className = `font-black text-base ${bilans >= 0 ? 'text-profit' : 'text-loss'}`;
         }
 
         function editTrade(id) {
-            const item = tradesData.find(t => t.id === id);
-            if(!item) return;
+            const t = tradesData.find(item => item.id === id);
+            if(!t) return;
 
-            document.getElementById('form-trade-id').value = item.id;
-            document.getElementById('form-instrument').value = item.instrument;
-            document.getElementById('form-entry-price').value = item.entry_price;
-            document.getElementById('form-exit-price').value = item.exit_price;
-            document.getElementById('form-profit').value = item.profit;
-            document.getElementById('form-lot-size').value = item.lot_size;
-            document.getElementById('form-strategy').value = item.strategy;
-            document.getElementById('form-date').value = item.date;
+            document.getElementById('form-trade-id').value = t.id;
+            document.getElementById('form-instrument').value = t.instrument;
+            document.getElementById('form-entry-price').value = t.entry_price;
+            document.getElementById('form-exit-price').value = t.exit_price;
+            document.getElementById('form-profit').value = t.profit;
+            document.getElementById('form-lot-size').value = t.lot_size;
+            document.getElementById('form-strategy').value = t.strategy;
+            document.getElementById('form-date').value = t.date;
 
-            document.getElementById('journal-form-title').innerText = "Edytuj Transakcję";
-            document.getElementById('form-submit-btn').innerText = "Zatwierdź Zmiany";
+            document.getElementById('journal-form-title').innerText = "Modyfikuj Pozycję";
+            document.getElementById('form-submit-btn').innerText = "Zatwierdź Edycję";
             document.getElementById('form-cancel-btn').classList.remove('hidden');
+            document.getElementById('trade-form').scrollIntoView({ behavior: 'smooth' });
         }
 
         function resetTradeForm() {
             document.getElementById('trade-form').reset();
             document.getElementById('form-trade-id').value = "";
-            document.getElementById('journal-form-title').innerText = "Dodaj Nową Transakcję";
-            document.getElementById('form-submit-btn').innerText = "Dodaj Pozycję";
+            document.getElementById('journal-form-title').innerText = "Zarejestruj Transakcję";
+            document.getElementById('form-submit-btn').innerText = "Zapisyzenie w Dzienniku";
             document.getElementById('form-cancel-btn').classList.add('hidden');
+            document.getElementById('form-date').value = new Date().toISOString().split('T')[0];
         }
 
-        // --- WYKRES (CHART.JS) ---
-        function filterDashboardData(range) {
-            currentDashboardFilter = range;
+        // --- APARATURA WYKRESÓW (CHART ENGINE) ---
+        function filterDashboardData(r) {
+            currentDashboardFilter = r;
             document.querySelectorAll('[id^="filter-dash-"]').forEach(b => {
                 b.className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-muted-theme";
             });
-            document.getElementById(`filter-dash-${range}`).className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--text-main)] bg-[var(--bg-card)] border border-theme";
-            renderCharts();
+            document.getElementById(`filter-dash-${r}`).className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--text-main)] bg-[var(--bg-card)] border border-theme";
+            renderEquityChart();
         }
 
-        function renderCharts() {
+        function renderEquityChart() {
             const canvas = document.getElementById('equityChart');
             if(!canvas) return;
 
-            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-            const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
-            const textMain = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+            const cAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            const cBorder = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+            const cText = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
 
-            let balance = currentSettings.initial_capital;
-            let labels = ['Start'];
-            let dataset = [balance];
+            let saldo = currentSettings.initial_capital;
+            let etykiety = ['Start'];
+            let punkty = [saldo];
 
-            // Filtrowanie dat
-            let processedTrades = [...tradesData];
-            const modern = new Date(2026, 4, 20); // Dziś rano w 2026 r.
+            let transakcjeFiltrowane = [...tradesData];
+            const punktTeraz = new Date(2026, 4, 20); // Środek maja 2026 r.
 
-            if (currentDashboardFilter === 'day') {
-                processedTrades = processedTrades.filter(t => new Date(t.date).toDateString() === modern.toDateString());
-            } else if (currentDashboardFilter === 'week') {
-                const oneWeekAgo = new Date(modern.getTime() - 7 * 24 * 60 * 60 * 1000);
-                processedTrades = processedTrades.filter(t => new Date(t.date) >= oneWeekAgo);
-            } else if (currentDashboardFilter === 'month') {
-                const oneMonthAgo = new Date(modern.getTime() - 30 * 24 * 60 * 60 * 1000);
-                processedTrades = processedTrades.filter(t => new Date(t.date) >= oneMonthAgo);
+            if(currentDashboardFilter === 'week') {
+                const tydzienTemu = new Date(punktTeraz.getTime() - 7 * 24 * 60 * 60 * 1000);
+                transakcjeFiltrowane = transakcjeFiltrowane.filter(t => new Date(t.date) >= tydzienTemu);
+            } else if(currentDashboardFilter === 'month') {
+                const miesiacTemu = new Date(punktTeraz.getTime() - 30 * 24 * 60 * 60 * 1000);
+                transakcjeFiltrowane = transakcjeFiltrowane.filter(t => new Date(t.date) >= miesiacTemu);
             }
 
-            processedTrades.forEach(t => {
-                balance += t.profit;
-                labels.push(t.date);
-                dataset.push(balance);
+            transakcjeFiltrowane.forEach(t => {
+                saldo += t.profit;
+                etykiety.push(t.date);
+                punkty.push(saldo);
             });
 
-            if(myChartInstance) myChartInstance.destroy();
+            if(chartEquity) chartEquity.destroy();
 
-            myChartInstance = new Chart(canvas.getContext('2d'), {
+            chartEquity = new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    labels: etykiety,
                     datasets: [{
-                        label: 'Kapitał Portfela',
-                        data: dataset,
-                        borderColor: accentColor,
-                        backgroundColor: 'rgba(41, 98, 255, 0.05)',
+                        data: punkty,
+                        borderColor: cAccent,
+                        backgroundColor: 'rgba(41, 98, 255, 0.04)',
                         borderWidth: 2,
                         fill: true,
                         tension: 0.1,
-                        pointRadius: labels.length > 20 ? 0 : 3
+                        pointRadius: etykiety.length > 30 ? 0 : 3
                     }]
                 },
                 options: {
@@ -985,80 +942,157 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { color: gridColor }, ticks: { color: textMain, font: { size: 10 } } },
-                        y: { grid: { color: gridColor }, ticks: { color: textMain, font: { size: 10 } } }
+                        x: { grid: { color: cBorder }, ticks: { color: cText, font: { size: 10 } } },
+                        y: { grid: { color: cBorder }, ticks: { color: cText, font: { size: 10 } } }
                     }
                 }
             });
         }
 
-        // --- KALENDARZ ---
-        function changeMonth(dir) {
-            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
+        function renderAdvancedAnalytics() {
+            // Obliczenia statystyczne zaawansowane
+            let zyski = 0, straty = 0, wCount = 0, lCount = 0;
+            let maxDrawdown = 0, peak = currentSettings.initial_capital, currentEquity = currentSettings.initial_capital;
+
+            tradesData.forEach(t => {
+                currentEquity += t.profit;
+                if(currentEquity > peak) peak = currentEquity;
+                let dd = peak - currentEquity;
+                if(dd > maxDrawdown) maxDrawdown = dd;
+
+                if(t.profit > 0) { zyski += t.profit; wCount++; }
+                else { straty += Math.abs(t.profit); lCount++; }
+            });
+
+            const expectancy = tradesData.length > 0 ? (zyski - straty) / tradesData.length : 0;
+            const avgW = wCount > 0 ? zyski / wCount : 0;
+            const avgL = lCount > 0 ? straty / lCount : 1;
+
+            document.getElementById('analytics-expectancy').innerText = `${expectancy.toFixed(2)} USD`;
+            document.getElementById('analytics-expectancy').className = `text-2xl font-black mt-2 ${expectancy >= 0 ? 'text-profit' : 'text-loss'}`;
+            document.getElementById('analytics-drawdown').innerText = `-${maxDrawdown.toFixed(2)} USD`;
+            document.getElementById('analytics-win-loss-ratio').innerText = `1 : ${(avgL > 0 ? avgW / avgL : 0).toFixed(1)}`;
+
+            // Wykres 1: Rozkład Zysków/Strat (Histogram kołowy/polarny)
+            const ctxDist = document.getElementById('distributionChart');
+            if(ctxDist) {
+                if(chartDistribution) chartDistribution.destroy();
+                chartDistribution = new Chart(ctxDist.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Zyskowne', 'Stratne'],
+                        datasets: [{
+                            data: [wCount, lCount],
+                            backgroundColor: [getComputedStyle(document.documentElement).getPropertyValue('--profit-color').trim(), getComputedStyle(document.documentElement).getPropertyValue('--loss-color').trim()],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#fff' } } } }
+                });
+            }
+
+            // Wykres 2: Miesięczne ujęcie słupkowe
+            const ctxBar = document.getElementById('monthlyBarChart');
+            if(ctxBar) {
+                if(chartMonthlyBar) chartMonthlyBar.destroy();
+                
+                // Agregacja danych miesięcznych na rok 2026
+                let mBuckets = Array(12).fill(0);
+                tradesData.forEach(t => {
+                    let d = new Date(t.date);
+                    if(d.getFullYear() === 2026) { mBuckets[d.getMonth()] += t.profit; }
+                });
+
+                chartMonthlyBar = new Chart(ctxBar.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
+                        datasets: [{
+                            data: mBuckets,
+                            backgroundColor: mBuckets.map(v => v >= 0 ? '#26a69a' : '#ef5350')
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { color: '#fff' } },
+                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // --- INTERFEJS KALENDARZA ---
+        function changeMonth(krok) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + krok);
             renderCalendar();
         }
 
         function renderCalendar() {
             const grid = document.getElementById('calendar-grid');
-            const header = document.getElementById('calendar-month-year');
+            const naglowek = document.getElementById('calendar-month-year');
             if(!grid) return;
 
-            const polishMonths = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
-            const year = currentCalendarDate.getFullYear();
-            const month = currentCalendarDate.getMonth();
-            header.innerText = `${polishMonths[month]} ${year}`;
+            const mNazwy = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+            const rok = currentCalendarDate.getFullYear();
+            const miesiac = currentCalendarDate.getMonth();
+            naglowek.innerText = `${mNazwy[miesiac]} ${rok}`;
 
             grid.innerHTML = '';
 
-            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
-            const totalDays = new Date(year, month + 1, 0).getDate();
+            const idxPierwszegoDnia = (new Date(rok, miesiac, 1).getDay() + 6) % 7;
+            const dniWMiesiacu = new Date(rok, miesiac + 1, 0).getDate();
 
-            for (let i = 0; i < firstDayIndex; i++) {
+            for(let i = 0; i < idxPierwszegoDnia; i++) {
                 grid.innerHTML += `<div class="p-2 border border-transparent"></div>`;
             }
 
-            for (let d = 1; d <= totalDays; d++) {
-                const dayString = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                const dayTrades = tradesData.filter(t => t.date === dayString);
+            for(let d = 1; d <= dniWMiesiacu; d++) {
+                const kluczDaty = `${rok}-${String(miesiac + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const pozycjeDnia = tradesData.filter(t => t.date === kluczDaty);
                 
-                let profitSum = 0;
-                dayTrades.forEach(t => profitSum += t.profit);
+                let sumaDnia = 0;
+                pozycjeDnia.forEach(t => sumaDnia += t.profit);
 
-                let badge = '';
-                let bgStyle = 'bg-[var(--bg-card)]/40';
-                if(dayTrades.length > 0) {
-                    bgStyle = profitSum >= 0 ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-rose-950/40 border-rose-500/50';
-                    badge = `<div class="text-[9px] font-bold mt-1 ${profitSum >= 0 ? 'text-profit' : 'text-loss'}">${profitSum >= 0 ? '+' : ''}${profitSum.toFixed(0)}</div>`;
+                let badgeHtml = '';
+                let stylRamki = 'bg-[var(--bg-card)]/30';
+
+                if(pozycjeDnia.length > 0) {
+                    stylRamki = sumaDnia >= 0 ? 'bg-emerald-950/30 border-emerald-500/40' : 'bg-rose-950/30 border-rose-500/40';
+                    badgeHtml = `<div class="text-[10px] font-black mt-2 ${sumaDnia >= 0 ? 'text-profit' : 'text-loss'}">${sumaDnia >= 0 ? '+' : ''}${sumaDnia.toFixed(0)}</div>`;
                 }
 
                 grid.innerHTML += `
-                    <div onclick="openCalendarModal('${dayString}')" class="p-2 border border-theme rounded-lg text-left flex flex-col justify-between min-h-[55px] cursor-pointer hover:border-[var(--accent)] transition-all ${bgStyle}">
-                        <span class="text-xs font-semibold text-muted-theme">${d}</span>
-                        ${badge}
+                    <div onclick="openCalendarModal('${kluczDaty}')" class="p-2 border border-theme rounded-lg text-left flex flex-col justify-between min-h-[60px] cursor-pointer hover:border-[var(--accent)] transition-all ${stylRamki}">
+                        <span class="text-xs font-bold text-muted-theme">${d}</span>
+                        ${badgeHtml}
                     </div>
                 `;
             }
         }
 
-        function openCalendarModal(dateStr) {
+        function openCalendarModal(dataStr) {
             const modal = document.getElementById('calendar-day-modal');
-            const titleDate = document.getElementById('cal-modal-date');
             const tbody = document.getElementById('cal-modal-table-body');
-            
-            const dayTrades = tradesData.filter(t => t.date === dateStr);
-            if(dayTrades.length === 0) return;
+            const tDate = document.getElementById('cal-modal-date');
 
-            titleDate.innerText = dateStr;
+            const filtr = tradesData.filter(t => t.date === dataStr);
+            if(filtr.length === 0) return;
+
+            tDate.innerText = dataStr;
             tbody.innerHTML = '';
 
-            dayTrades.forEach(t => {
+            filtr.forEach(t => {
                 tbody.innerHTML += `
-                    <tr class="border-b border-theme/50">
-                        <td class="py-2 font-bold">${t.instrument}</td>
+                    <tr class="border-b border-theme/40 text-[11px]">
+                        <td class="py-2 font-black">${t.instrument}</td>
                         <td class="py-2">${t.strategy}</td>
-                        <td class="py-2 text-muted-theme">${t.entry_price} / ${t.exit_price}</td>
-                        <td class="py-2">${t.lot_size}</td>
-                        <td class="py-2 text-right font-bold ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
+                        <td class="py-2 text-muted-theme font-mono">${t.entry_price} → ${t.exit_price}</td>
+                        <td class="py-2 font-mono">${t.lot_size}</td>
+                        <td class="py-2 text-right font-black ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
                     </tr>
                 `;
             });
@@ -1071,17 +1105,17 @@
             document.getElementById('calendar-day-modal').classList.add('hidden');
         }
 
-        // --- EXPORT CSV ---
+        // --- EKSPORT DANYCH DO PLIKU CSV ---
         function exportToCSV() {
-            if(tradesData.length === 0) return alert("Brak danych do eksportu.");
-            let csv = 'Id,Data,Instrument,Strategia,Wejscie,Wyjscie,Lot,Profit\n';
+            if(tradesData.length === 0) return alert("Brak danych w bazie tradera do wyeksportowania.");
+            let naglowek = 'Id,Data_Transakcji,Instrument,Wykorzystana_Strategia,Cena_Wejscia,Cena_Wyjscia,Lot_Size,Zysk_Strata_USD\n';
             tradesData.forEach(t => {
-                csv += `${t.id},${t.date},${t.instrument},${t.strategy},${t.entry_price},${t.exit_price},${t.lot_size},${t.profit}\n`;
+                naglowek += `${t.id},${t.date},${t.instrument},${t.strategy},${t.entry_price},${t.exit_price},${t.lot_size},${t.profit}\n`;
             });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const blob = new Blob([naglowek], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", `trading_journal_export_2026.csv`);
+            link.setAttribute("download", `trading_journal_data_export_2026.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
