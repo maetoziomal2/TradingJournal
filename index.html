@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium Trading Journal Pro</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
@@ -110,6 +114,7 @@
 </head>
 <body data-theme="tradingview" class="p-2 md:p-6">
 
+    <!-- TOP HEADER / NAVIGATION -->
     <header class="glass-panel rounded-2xl p-4 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-3">
             <i class="fa-solid fa-chart-line text-2xl" style="color: var(--accent);"></i>
@@ -119,6 +124,7 @@
             </div>
         </div>
         
+        <!-- Tabs -->
         <nav class="flex flex-wrap gap-2 justify-center">
             <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn active px-4 py-2 text-sm uppercase tracking-wider cursor-pointer"><i class="fa-solid fa-gauge mr-2"></i>Strona Główna</button>
             <button onclick="switchTab('journal')" id="tab-journal" class="tab-btn px-4 py-2 text-sm uppercase tracking-wider cursor-pointer"><i class="fa-solid fa-book mr-2"></i>Dziennik Tradera</button>
@@ -126,15 +132,19 @@
             <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 text-sm uppercase tracking-wider cursor-pointer"><i class="fa-solid fa-gear mr-2"></i>Ustawienia</button>
         </nav>
 
+        <!-- Connection Status Indicator -->
         <div class="flex items-center gap-3 text-xs bg-black/30 px-3 py-1.5 rounded-full border border-gray-700">
             <span id="conn-badge" class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
             <span id="conn-text" style="color: var(--text-main);">Supabase: Rozłączony (Local)</span>
         </div>
     </header>
 
+    <!-- CONTENT SECTIONS -->
     <main>
         
+        <!-- SECTION 1: STRONA GŁÓWNA -->
         <section id="sec-dashboard" class="space-y-6">
+            <!-- Stats Grid -->
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="glass-panel rounded-xl p-4 flex flex-col justify-between">
                     <span class="text-xs uppercase font-medium" style="color: var(--text-muted);">Kapitał Początkowy</span>
@@ -165,7 +175,9 @@
                 </div>
             </div>
 
+            <!-- Chart & Strategy Grid -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Equity Curve Chart -->
                 <div class="glass-panel rounded-xl p-4 lg:col-span-2 min-h-[320px]">
                     <h3 class="text-sm font-bold uppercase mb-4 tracking-wider"><i class="fa-solid fa-chart-area mr-2" style="color: var(--accent);"></i>Interaktywny Wykres Equity</h3>
                     <div class="w-full h-64">
@@ -173,13 +185,16 @@
                     </div>
                 </div>
 
+                <!-- Strategy Comparison Analytics -->
                 <div class="glass-panel rounded-xl p-4">
                     <h3 class="text-sm font-bold uppercase mb-4 tracking-wider"><i class="fa-solid fa-pie-chart mr-2" style="color: var(--accent);"></i>Porównanie Strategii</h3>
                     <div id="strategy-analytics-container" class="space-y-4">
-                        </div>
+                        <!-- Strategy Stats Cards dynamic load -->
+                    </div>
                 </div>
             </div>
 
+            <!-- Recent Trades -->
             <div class="glass-panel rounded-xl p-4">
                 <h3 class="text-sm font-bold uppercase mb-4 tracking-wider"><i class="fa-solid fa-clock-rotate-left mr-2" style="color: var(--accent);"></i>Ostatnie Transakcje</h3>
                 <div class="overflow-x-auto w-full">
@@ -194,14 +209,17 @@
                             </tr>
                         </thead>
                         <tbody id="recent-trades-tbody">
-                            </tbody>
+                            <!-- Dynamic Content -->
+                        </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
+        <!-- SECTION 2: DZIENNIK TRADERA -->
         <section id="sec-journal" class="space-y-6 hidden">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+                <!-- Entry Form -->
                 <div class="glass-panel rounded-xl p-5 lg:col-span-1 space-y-4">
                     <h3 id="form-title" class="text-sm font-bold uppercase tracking-wider mb-2"><i class="fa-solid fa-square-plus mr-2" style="color: var(--accent);"></i>Nowa Transakcja</h3>
                     <input type="hidden" id="trade-id">
@@ -248,7 +266,9 @@
                     </div>
                 </div>
 
+                <!-- Database / Table Section -->
                 <div class="lg:col-span-3 space-y-4">
+                    <!-- Filters & Tools Bar -->
                     <div class="glass-panel rounded-xl p-4 flex flex-wrap gap-4 items-center justify-between">
                         <div class="flex flex-wrap gap-3 items-center">
                             <div>
@@ -266,6 +286,7 @@
                         <button onclick="exportToCSV()" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-bold tracking-wider uppercase cursor-pointer"><i class="fa-solid fa-file-csv mr-2"></i>Eksport CSV</button>
                     </div>
 
+                    <!-- Journal Dynamic Statistical Counter Panel -->
                     <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
                         <div class="bg-black/20 p-3 rounded-lg border border-dashed" style="border-color: var(--border-color);">
                             <span class="text-[10px] uppercase block" style="color: var(--text-muted);">Zysk/Strata (Wybrane)</span>
@@ -289,6 +310,7 @@
                         </div>
                     </div>
 
+                    <!-- Main Journal Table -->
                     <div class="glass-panel rounded-xl overflow-hidden">
                         <div class="overflow-x-auto w-full max-h-[500px]">
                             <table class="w-full text-left text-xs border-collapse">
@@ -305,7 +327,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="journal-tbody">
-                                    </tbody>
+                                    <!-- Dynamic Rows -->
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -313,21 +336,26 @@
             </div>
         </section>
 
+        <!-- SECTION 3: KALENDARZ -->
         <section id="sec-calendar" class="space-y-6 hidden">
             <div class="glass-panel rounded-xl p-4">
+                <!-- Navigation Bar -->
                 <div class="flex justify-between items-center mb-6">
                     <button onclick="prevMonth()" class="px-3 py-1.5 bg-black/40 border rounded text-xs font-bold uppercase tracking-wider cursor-pointer hover:border-blue-500" style="border-color: var(--border-color);"><i class="fa-solid fa-chevron-left mr-1"></i> Poprzedni</button>
                     <h2 id="calendar-month-year" class="text-base font-black tracking-widest uppercase">Miesiąc Rok</h2>
                     <button onclick="nextMonth()" class="px-3 py-1.5 bg-black/40 border rounded text-xs font-bold uppercase tracking-wider cursor-pointer hover:border-blue-500" style="border-color: var(--border-color);">Następny <i class="fa-solid fa-chevron-right ml-1"></i></button>
                 </div>
 
+                <!-- Calendar Structure Grid -->
                 <div class="grid grid-cols-7 gap-1.5 text-center font-bold text-xs mb-2 uppercase" style="color: var(--text-muted);">
                     <div>Pon</div><div>Wt</div><div>Śr</div><div>Czw</div><div>Pt</div><div>Sob</div><div>Nied</div>
                 </div>
                 <div id="calendar-days-grid" class="grid grid-cols-7 gap-2 min-h-[350px]">
-                    </div>
+                    <!-- Generated via JS -->
+                </div>
             </div>
 
+            <!-- Detail overlay view for selected day -->
             <div id="day-trades-detail-box" class="glass-panel rounded-xl p-4 hidden">
                 <div class="flex justify-between items-center mb-3">
                     <h4 class="text-sm font-black uppercase tracking-wider text-blue-400"><i class="fa-solid fa-folder-open mr-2"></i>Pozycje z dnia: <span id="detail-box-date" class="font-mono">--</span></h4>
@@ -350,8 +378,11 @@
             </div>
         </section>
 
+        <!-- SECTION 4: USTAWIENIA -->
         <section id="sec-settings" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+            <!-- Profil i Motywy -->
             <div class="space-y-6">
+                <!-- Theme Selector Card -->
                 <div class="glass-panel rounded-xl p-5 space-y-4">
                     <h3 class="text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-palette mr-2" style="color: var(--accent);"></i>Wybierz Motyw Interfejsu</h3>
                     <div>
@@ -365,6 +396,7 @@
                     </div>
                 </div>
 
+                <!-- Profile configuration -->
                 <div class="glass-panel rounded-xl p-5 space-y-4">
                     <h3 class="text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-user-gear mr-2" style="color: var(--accent);"></i>Profil Tradera</h3>
                     <div class="space-y-3">
@@ -385,7 +417,9 @@
                 </div>
             </div>
 
+            <!-- Supabase & Backups Core Integration -->
             <div class="space-y-6">
+                <!-- Supabase Cloud Credentials Card -->
                 <div class="glass-panel rounded-xl p-5 space-y-4">
                     <h3 class="text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-cloud mr-2" style="color: var(--accent);"></i>Konfiguracja Supabase Cloud</h3>
                     <div class="space-y-3">
@@ -398,12 +432,13 @@
                             <input type="password" id="sb-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." class="w-full bg-black/40 border p-2 rounded text-sm font-mono" style="border-color: var(--border-color);">
                         </div>
                         <div class="flex flex-wrap gap-2 pt-1">
-                            <button onclick="connectSupabase()" class="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-xs uppercase font-bold tracking-wider cursor-pointer">Połącz baze</button>
+                            <button onclick="connectSupabase()" class="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded text-xs uppercase font-bold tracking-wider cursor-pointer">Zapisz i połącz baze</button>
                             <button onclick="syncDataNow()" class="bg-indigo-700 hover:bg-indigo-600 px-4 py-2 rounded text-xs uppercase font-bold tracking-wider cursor-pointer"><i class="fa-solid fa-rotate mr-1"></i> Synchronizuj teraz</button>
                         </div>
                     </div>
                 </div>
 
+                <!-- Manual JSON Backups System -->
                 <div class="glass-panel rounded-xl p-5 space-y-4">
                     <h3 class="text-sm font-bold uppercase tracking-wider"><i class="fa-solid fa-database mr-2" style="color: var(--accent);"></i>Zarządzanie kopiami (Backup)</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -422,6 +457,7 @@
 
     </main>
 
+    <!-- SYSTEM CORE JAVASCRIPT LOGIC -->
     <script>
         // State Management
         let state = {
@@ -459,6 +495,7 @@
         }
 
         function saveStateToLocalStorage() {
+            // Zapisujemy całościowy stan (w tym klucze supabase) do localStorage przeglądarki
             localStorage.setItem('trading_journal_pro_state', JSON.stringify(state));
         }
 
@@ -490,11 +527,9 @@
             if (!sbClient) return;
             try {
                 setSupabaseStatus(true, "Sprawdzanie...");
-                // Test fetch row from settings table
                 const { data, error } = await sbClient.from('settings').select('*').limit(1);
                 if (error) throw error;
                 setSupabaseStatus(true, "Połączono z Chmurą");
-                // Automatically fetch latest data if cloud is primary
                 await downloadDataFromSupabase();
             } catch (err) {
                 setSupabaseStatus(false, "Błąd autoryzacji / tabel");
@@ -519,15 +554,22 @@
             const url = document.getElementById('sb-url').value.trim();
             const key = document.getElementById('sb-key').value.trim();
             
-            state.supabaseUrl = url;
-            state.supabaseKey = key;
-            saveStateToLocalStorage();
-            
             if(!url || !key) {
                 alert("Wprowadź poprawne parametry URL i klucz Anon.");
                 return;
             }
+
+            // Zapisanie wprowadzonych ustawień Supabase do zmiennych stanu i localStorage
+            state.supabaseUrl = url;
+            state.supabaseKey = key;
+            saveStateToLocalStorage();
+            
             initSupabaseClientInstance();
+            
+            // Jeżeli połączenie się udało, nadpisz dane w tabeli settings w bazie danych Supabase
+            if (sbClient) {
+                await uploadSettingsToSupabase();
+            }
         }
 
         // Data Synchronization Engines
@@ -538,6 +580,7 @@
             }
             try {
                 setSupabaseStatus(true, "Synchronizacja...");
+                await uploadSettingsToSupabase();
                 await uploadDataToSupabase();
                 await downloadDataFromSupabase();
                 setSupabaseStatus(true, "Połączono z Chmurą");
@@ -547,13 +590,11 @@
                 setSupabaseStatus(false, "Błąd synchronizacji");
             }
         }
-
-        async function uploadDataToSupabase() {
+        
+        async function uploadSettingsToSupabase() {
             if (!sbClient) return;
-            
-            // 1. Sync User Profile Settings
             const profilePayload = {
-                id: 1, // Static single profile indicator row for simple use case
+                id: 1, // Globalny rekord ustawień
                 initial_capital: parseFloat(state.initialCapital),
                 theme: state.currentTheme,
                 profile_name: state.profile.name,
@@ -561,11 +602,13 @@
                 profile_currency: state.profile.currency,
                 updated_at: new Date()
             };
-            await sbClient.from('settings').upsert(profilePayload);
+            const { error } = await sbClient.from('settings').upsert(profilePayload);
+            if (error) console.error("Error saving settings to supabase:", error);
+        }
 
-            // 2. Sync Trades Data
+        async function uploadDataToSupabase() {
+            if (!sbClient) return;
             if (state.trades.length > 0) {
-                // Map local states to clean table structures
                 const tradesPayload = state.trades.map(t => ({
                     id: t.id,
                     instrument: t.instrument.toUpperCase(),
@@ -576,7 +619,6 @@
                     lot_size: parseFloat(t.lot_size),
                     date: new Date(t.date).toISOString()
                 }));
-                
                 const { error } = await sbClient.from('trades').upsert(tradesPayload);
                 if (error) console.error("Error pushing trades to cloud backend:", error);
             }
@@ -585,7 +627,6 @@
         async function downloadDataFromSupabase() {
             if (!sbClient) return;
             
-            // 1. Fetch settings row
             const { data: settingsData } = await sbClient.from('settings').select('*').maybeSingle();
             if (settingsData) {
                 state.initialCapital = parseFloat(settingsData.initial_capital || 10000);
@@ -599,7 +640,6 @@
                 applyThemeStylesheet(state.currentTheme);
             }
 
-            // 2. Fetch all trades rows
             const { data: tradesData, error } = await sbClient.from('trades').select('*').order('date', { ascending: true });
             if (!error && tradesData) {
                 state.trades = tradesData.map(t => ({
@@ -610,7 +650,7 @@
                     profit_loss: t.profit_loss,
                     strategy: t.strategy,
                     lot_size: t.lot_size,
-                    date: t.date.slice(0,16) // Convert back to standard html datetime-local string compatibility length
+                    date: t.date.slice(0,16)
                 }));
             }
             saveStateToLocalStorage();
@@ -629,14 +669,9 @@
 
             document.getElementById(`sec-${tabId}`).classList.remove('hidden');
             
-            // Trigger specific rendering views hooks
-            if (tabId === 'dashboard') {
-                refreshAllUIViews(); 
-            } else if (tabId === 'journal') {
-                renderJournal();
-            } else if (tabId === 'calendar') {
-                renderCalendar();
-            }
+            if (tabId === 'dashboard') refreshAllUIViews(); 
+            else if (tabId === 'journal') renderJournal();
+            else if (tabId === 'calendar') renderCalendar();
         }
 
         // Theme CSS Inject Logic
@@ -644,7 +679,7 @@
             state.currentTheme = themeName;
             saveStateToLocalStorage();
             applyThemeStylesheet(themeName);
-            if (sbClient) sbClient.from('settings').upsert([{ id: 1, theme: themeName }]);
+            if (sbClient) uploadSettingsToSupabase();
         }
 
         function applyThemeStylesheet(theme) {
@@ -653,7 +688,6 @@
 
         // Global Calculations Engine
         function refreshAllUIViews() {
-            // Sort trades chronologically
             state.trades.sort((a,b) => new Date(a.date) - new Date(b.date));
 
             let totalProfit = 0;
@@ -672,7 +706,6 @@
             const totalTrades = state.trades.length;
             const winrate = totalTrades > 0 ? (wins / totalTrades) * 100 : 0;
 
-            // DOM Updates Dashboard
             document.getElementById('stat-init-cap').innerText = parseFloat(state.initialCapital).toFixed(2);
             document.getElementById('stat-curr-cap').innerText = currentCapital.toFixed(2);
             
@@ -687,7 +720,6 @@
             document.getElementById('stat-trades-count').innerText = totalTrades;
             document.getElementById('stat-winrate').innerText = `${winrate.toFixed(2)}%`;
 
-            // Build dynamic UI components
             buildEquityCurveChart();
             buildStrategyComparisonCards();
             renderRecentTradesTable();
@@ -698,7 +730,7 @@
             if (n !== null && !isNaN(parseFloat(n))) {
                 state.initialCapital = parseFloat(n);
                 saveStateToLocalStorage();
-                if(sbClient) sbClient.from('settings').upsert([{id:1, initial_capital: state.initialCapital}]);
+                if(sbClient) uploadSettingsToSupabase();
                 refreshAllUIViews();
             }
         }
@@ -707,7 +739,6 @@
         function buildEquityCurveChart() {
             const ctx = document.getElementById('equityChart').getContext('2d');
             
-            // Build datasets arrays
             let cumulativeCapital = parseFloat(state.initialCapital);
             const labels = ['Początek'];
             const dataPoints = [cumulativeCapital];
@@ -811,7 +842,6 @@
             const tbody = document.getElementById('recent-trades-tbody');
             tbody.innerHTML = '';
             
-            // Take slice of last 5 entries executed chronological reverse
             const list = [...state.trades].reverse().slice(0, 5);
 
             if(list.length === 0) {
@@ -848,7 +878,6 @@
                 return matchStrat && matchInst;
             });
 
-            // Local statistical recalculation counters
             let sumPnl = 0, wins = 0, losses = 0, grossProfit = 0, grossLoss = 0;
             
             filtered.forEach(t => {
@@ -881,7 +910,6 @@
                 return;
             }
 
-            // Populate rows mapping reverse chronological direction
             [...filtered].reverse().forEach(t => {
                 const pnl = parseFloat(t.profit_loss);
                 const row = `
@@ -929,13 +957,10 @@
                 date: date ? date : new Date().toISOString().slice(0, 16)
             };
 
-            // Database Operations Switcher
             if (id) {
-                // Edit Entry inside state array lookup
                 const idx = state.trades.findIndex(t => t.id === id);
                 if (idx !== -1) state.trades[idx] = payload;
             } else {
-                // Add new entry object element
                 state.trades.push(payload);
             }
 
@@ -1001,7 +1026,7 @@
             document.getElementById('inp-date').value = new Date().toISOString().slice(0, 16);
             
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-square-plus mr-2" style="color: var(--accent);"></i>Nowa Transakcja`;
-            document.getElementById('btn-cancel-edit').add('hidden');
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
         }
 
         function exportToCSV() {
@@ -1032,19 +1057,16 @@
             const monthNames = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
             document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
 
-            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; // Convert matching grid starts mon offset index layout
+            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
             const totalDays = new Date(year, month + 1, 0).getDate();
 
-            // Append leading empty elements pads spacers
             for (let i = 0; i < firstDayIndex; i++) {
                 grid.innerHTML += `<div class="bg-transparent"></div>`;
             }
 
-            // Evaluate aggregate data metrics logic per calendar loop day matching key configurations
             for (let day = 1; day <= totalDays; day++) {
                 const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
                 
-                // Fetch daily targeted execution objects array
                 const dayTrades = state.trades.filter(t => t.date.startsWith(dateStr));
                 
                 let dayPnl = 0;
@@ -1117,7 +1139,7 @@
             refreshAllUIViews();
             
             if(sbClient) {
-                sbClient.from('settings').upsert([{ id: 1, profile_name: state.profile.name, profile_broker: state.profile.broker, profile_currency: state.profile.currency }]);
+                uploadSettingsToSupabase();
             }
             alert("Profil został zaktualizowany pomyślnie.");
         }
