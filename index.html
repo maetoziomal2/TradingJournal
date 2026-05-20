@@ -460,14 +460,8 @@
     <!-- SYSTEM CORE JAVASCRIPT LOGIC -->
     <script>
         // State Management
-        let state = {
-            initialCapital: 10000.00,
-            trades: [],
-            profile: { name: '', broker: '', currency: 'USD' },
-            supabaseUrl: '',
-            supabaseKey: '',
-            currentTheme: 'tradingview'
-        };
+        const SUPABASE_URL = "https://svmepxuwnvwyayeabdgm.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWVweHV3bnZ3eWF5ZWFiZGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDI5MTIsImV4cCI6MjA5NDc3ODkxMn0.K4a2vQ6lXFJ2f7_VGld72iApvUNr9ubnQP9O2xfv6Vc";
 
         let sbClient = null;
         let equityChartInstance = null;
@@ -511,17 +505,12 @@
 
         // Supabase Client Connection Core
         function initSupabaseClientInstance() {
-            if (state.supabaseUrl && state.supabaseKey) {
-                try {
-                    sbClient = window.supabase.createClient(state.supabaseUrl, state.supabaseKey);
-                    verifySupabaseConnection();
-                } catch(err) {
-                    setSupabaseStatus(false, "Błąd inicjalizacji");
-                }
-            } else {
-                setSupabaseStatus(false, "Rozłączony (Local)");
-            }
-        }
+    try {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        verifySupabaseConnection();
+    } catch(err) {
+        setSupabaseStatus(false, "Błąd inicjalizacji");
+    }
 
         async function verifySupabaseConnection() {
             if (!sbClient) return;
