@@ -138,7 +138,6 @@
             background: var(--accent);
         }
 
-        /* Hide Scrollbars when requested */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -147,7 +146,6 @@
             scrollbar-width: none;
         }
 
-        /* Mobile Adjustments */
         @media (max-width: 768px) {
             .mobile-bottom-nav {
                 background-color: var(--bg-sidebar);
@@ -158,6 +156,7 @@
 </head>
 <body class="min-h-screen flex flex-col md:flex-row pb-20 md:pb-0">
 
+    <!-- DESKTOP SIDEBAR -->
     <aside class="sidebar hidden md:flex flex-col w-64 fixed top-0 bottom-0 left-0 z-30 p-5">
         <div class="flex items-center gap-3 mb-8 px-2">
             <i class="fa-solid fa-chart-line text-2xl text-[var(--accent)] animate-pulse"></i>
@@ -165,7 +164,7 @@
         </div>
         
         <nav class="flex-1 space-y-2">
-            <button onclick="switchTab('dashboard')" id="btn-desktop-dashboard" class="nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--accent)] bg-[var(--border-color)]">
+            <button onclick="switchTab('dashboard')" id="btn-desktop-dashboard" class="nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-main)] bg-[var(--border-color)]">
                 <i class="fa-solid fa-gauge w-5 text-center"></i> Strona Główna
             </button>
             <button onclick="switchTab('journal')" id="btn-desktop-journal" class="nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]">
@@ -180,28 +179,31 @@
         </nav>
 
         <div class="mt-auto p-3 rounded-xl border border-theme bg-[var(--bg-card)] flex items-center gap-3">
-            <div id="sync-status-icon" class="w-3 h-3 rounded-full bg-emerald-500"></div>
+            <div id="sync-status-icon" class="w-3 h-3 rounded-full bg-amber-500"></div>
             <div class="text-xs">
-                <p id="sync-status-text" class="font-semibold">Połączono lokalnie</p>
-                <p class="text-muted-theme text-[10px]">Synchronizacja aktywne</p>
+                <p id="sync-status-text" class="font-semibold">Łączenie...</p>
+                <p class="text-muted-theme text-[10px]">Chmura Supabase</p>
             </div>
         </div>
     </aside>
 
+    <!-- MOBILE HEADER -->
     <header class="md:hidden flex items-center justify-between p-4 border-b border-theme sticky top-0 z-40 bg-[var(--bg-main)]">
         <div class="flex items-center gap-2">
             <i class="fa-solid fa-chart-line text-xl text-[var(--accent)]"></i>
             <span class="text-base font-bold tracking-wider">TRADER PRO</span>
         </div>
         <div class="flex items-center gap-2 px-3 py-1 rounded-full border border-theme text-xs bg-[var(--bg-card)]">
-            <div id="mobile-sync-icon" class="w-2 h-2 rounded-full bg-emerald-500"></div>
-            <span id="mobile-sync-text">Offline Mode</span>
+            <div id="mobile-sync-icon" class="w-2 h-2 rounded-full bg-amber-500"></div>
+            <span id="mobile-sync-text">Status...</span>
         </div>
     </header>
 
+    <!-- MAIN CONTENT CONTAINER -->
     <main class="flex-1 md:pl-64 min-h-screen flex flex-col w-full">
         <div class="p-4 md:p-8 space-y-6 max-w-7xl mx-auto w-full flex-1">
 
+            <!-- DASHBOARD TAB -->
             <section id="tab-dashboard" class="tab-content space-y-6">
                 <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
                     <div class="custom-card p-4 flex flex-col justify-between">
@@ -214,35 +216,35 @@
                     <div class="custom-card p-4 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Aktualny Kapitał</span>
                         <div class="mt-2 flex items-baseline justify-between">
-                            <span id="stat-current-capital" class="text-lg md:text-xl font-bold">12 450</span>
+                            <span id="stat-current-capital" class="text-lg md:text-xl font-bold">10 000</span>
                             <span class="text-xs text-muted-theme user-currency">USD</span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Total Profit</span>
                         <div class="mt-2 flex items-baseline justify-between">
-                            <span id="stat-total-profit" class="text-lg md:text-xl font-bold text-profit">+2 450</span>
+                            <span id="stat-total-profit" class="text-lg md:text-xl font-bold text-profit">0</span>
                             <span class="text-xs text-muted-theme user-currency">USD</span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Profit %</span>
                         <div class="mt-2 flex items-baseline justify-between">
-                            <span id="stat-profit-percent" class="text-lg md:text-xl font-bold text-profit">+24.5%</span>
+                            <span id="stat-profit-percent" class="text-lg md:text-xl font-bold text-profit">0%</span>
                             <span class="text-xs text-muted-theme"><i class="fa-solid fa-arrow-trend-up text-profit"></i></span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Liczba Trade</span>
                         <div class="mt-2 flex items-baseline justify-between">
-                            <span id="stat-total-trades" class="text-lg md:text-xl font-bold">48</span>
+                            <span id="stat-total-trades" class="text-lg md:text-xl font-bold">0</span>
                             <span class="text-xs text-muted-theme"><i class="fa-solid fa-bolt"></i></span>
                         </div>
                     </div>
                     <div class="custom-card p-4 flex flex-col justify-between">
                         <span class="text-xs font-semibold text-muted-theme uppercase tracking-wider">Winrate</span>
                         <div class="mt-2 flex items-baseline justify-between">
-                            <span id="stat-winrate" class="text-lg md:text-xl font-bold accent-text">62.5%</span>
+                            <span id="stat-winrate" class="text-lg md:text-xl font-bold accent-text">0%</span>
                             <span class="text-xs text-muted-theme"><i class="fa-solid fa-pie-chart"></i></span>
                         </div>
                     </div>
@@ -273,8 +275,7 @@
                             <p class="text-xs text-muted-theme">Skuteczność: ATH vs FVG vs Scalping</p>
                         </div>
                         <div class="flex-1 space-y-4">
-                            <div id="strategy-analytics-container" class="space-y-4">
-                                </div>
+                            <div id="strategy-analytics-container" class="space-y-4"></div>
                         </div>
                     </div>
 
@@ -296,14 +297,14 @@
                                         <th class="pb-2 text-right">Zarobek / Strata</th>
                                     </tr>
                                 </thead>
-                                <tbody id="dashboard-recent-trades">
-                                    </tbody>
+                                <tbody id="dashboard-recent-trades"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <!-- JOURNAL TAB -->
             <section id="tab-journal" class="tab-content space-y-6 hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <div class="custom-card p-4 md:p-6 lg:col-span-4 self-start">
@@ -424,8 +425,7 @@
                                         <th class="py-3 px-2 text-center">Akcje</th>
                                     </tr>
                                 </thead>
-                                <tbody id="journal-table-body">
-                                    </tbody>
+                                <tbody id="journal-table-body"></tbody>
                             </table>
                             <div id="journal-empty-state" class="text-center py-12 text-muted-theme hidden">
                                 <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
@@ -436,6 +436,7 @@
                 </div>
             </section>
 
+            <!-- CALENDAR TAB -->
             <section id="tab-calendar" class="tab-content space-y-6 hidden">
                 <div class="custom-card p-4 md:p-6">
                     <div class="flex items-center justify-between mb-6">
@@ -460,11 +461,10 @@
                         <div>Nd</div>
                     </div>
 
-                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 dynamic-calendar-cells min-h-[350px]">
-                        </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2 dynamic-calendar-cells min-h-[350px]"></div>
                 </div>
 
-                <div id="calendar-day-modal" class="custom-card p-4 md:p-6 hidden animate-fadeIn">
+                <div id="calendar-day-modal" class="custom-card p-4 md:p-6 hidden">
                     <div class="flex items-center justify-between border-b border-theme pb-3 mb-4">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-circle-info accent-text"></i>
@@ -482,17 +482,16 @@
                                     <th class="pb-2">LOT</th>
                                     <th class="pb-2 text-right">Zarobek / Strata</th>
                                 </tr>
-                            </thead>
-                            <tbody id="cal-modal-table-body">
-                                </tbody>
-                        </table>
+                            </table>
+                            <tbody id="cal-modal-table-body"></tbody>
+                        </div>
                     </div>
                 </div>
             </section>
 
+            <!-- SETTINGS TAB (Naprawiony i domknięty formularz) -->
             <section id="tab-settings" class="tab-content space-y-6 hidden">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
                     <div class="custom-card p-4 md:p-6 space-y-4">
                         <div>
                             <h2 class="text-base font-bold">Ustawienia Profilu Tradera</h2>
@@ -507,67 +506,25 @@
                                 <label class="block text-xs font-semibold mb-1 text-muted-theme">Kapitał Początkowy Operacyjny</label>
                                 <input type="number" step="any" id="set-initial-capital" value="10000" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs font-semibold mb-1 text-muted-theme">Broker giełdowy</label>
-                                    <input type="text" id="set-broker" value="TradingView Broker" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold mb-1 text-muted-theme">Waluta Rozliczeniowa</label>
-                                    <input type="text" id="set-currency" value="USD" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
-                                </div>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Broker giełdowy</label>
+                                <input type="text" id="set-broker" value="TradingView Broker" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
                             </div>
-                            <button onclick="saveProfileSettings()" class="w-full bg-[var(--accent)] hover:opacity-90 text-white font-bold py-2 rounded-lg text-xs transition-all cursor-pointer mt-2">
-                                Zapisz Profil
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="custom-card p-4 md:p-6 space-y-4">
-                        <div>
-                            <h2 class="text-base font-bold">Wybór Motywu Wizualnego</h2>
-                            <p class="text-xs text-muted-theme">Zmień akcenty kolorystyczne interfejsu live</p>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                            <button onclick="applyTheme('dark-pro')" id="theme-btn-dark-pro" class="flex items-center justify-between border border-theme px-4 py-3 rounded-xl text-xs font-semibold transition-all hover:bg-[var(--bg-main)] text-left cursor-pointer">
-                                <span>Dark Pro Carbon</span>
-                                <div class="w-3 h-3 rounded-full bg-[#2962ff]"></div>
-                            </button>
-                            <button onclick="applyTheme('cyber-blue')" id="theme-btn-cyber-blue" class="flex items-center justify-between border border-theme px-4 py-3 rounded-xl text-xs font-semibold transition-all hover:bg-[var(--bg-main)] text-left cursor-pointer">
-                                <span>Cyber Blue Neon</span>
-                                <div class="w-3 h-3 rounded-full bg-[#00f2fe]"></div>
-                            </button>
-                            <button onclick="applyTheme('matrix-green')" id="theme-btn-matrix-green" class="flex items-center justify-between border border-theme px-4 py-3 rounded-xl text-xs font-semibold transition-all hover:bg-[var(--bg-main)] text-left cursor-pointer">
-                                <span>Matrix Digital</span>
-                                <div class="w-3 h-3 rounded-full bg-[#00ff66]"></div>
-                            </button>
-                            <button onclick="applyTheme('tradingview')" id="theme-btn-tradingview" class="flex items-center justify-between border border-theme px-4 py-3 rounded-xl text-xs font-semibold transition-all hover:bg-[var(--bg-main)] text-left cursor-pointer">
-                                <span>TradingView Style</span>
-                                <div class="w-3 h-3 rounded-full bg-[#2962ff]"></div>
-                            </button>
-                            <button onclick="applyTheme('neon-purple')" id="theme-btn-neon-purple" class="flex items-center justify-between border border-theme px-4 py-3 rounded-xl text-xs font-semibold transition-all hover:bg-[var(--bg-main)] text-left cursor-pointer">
-                                <span>Neon Purple Glow</span>
-                                <div class="w-3 h-3 rounded-full bg-[#bd00ff]"></div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="custom-card p-4 md:p-6 space-y-4 md:col-span-2">
-                        <div>
-                            <h2 class="text-base font-bold">Zarządzanie bazą danych i kopiami zapasowymi</h2>
-                            <p class="text-xs text-muted-theme">Importuj, eksportuj oraz resetuj kompletny rejestr informacji</p>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <button onclick="exportBackupJSON()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all">
-                                <i class="fa-solid fa-file-export"></i> Eksportuj Kopię JSON
-                            </button>
-                            <label class="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all text-center">
-                                <i class="fa-solid fa-file-import"></i> Importuj Kopię JSON
-                                <input type="file" id="import-json-file" accept=".json" onchange="importBackupJSON(event)" class="hidden">
-                            </label>
-                            <button onclick="resetAllDataData()" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all">
-                                <i class="fa-solid fa-trash-can"></i> Wyczyszczenie Wszystkich Danych
-                            </button>
+                            <div>
+                                <label class="block text-xs font-semibold mb-1 text-muted-theme">Motyw kolorystyczny</label>
+                                <select id="set-theme" onchange="applyTheme(this.value)" class="w-full bg-[var(--bg-main)] border border-theme rounded-lg px-3 py-2 text-xs text-[var(--text-main)] focus:outline-none focus:border-[var(--accent)]">
+                                    <option value="dark-pro">Dark Pro</option>
+                                    <option value="cyber-blue">Cyber Blue</option>
+                                    <option value="matrix-green">Matrix Green</option>
+                                    <option value="tradingview">TradingView Dark</option>
+                                    <option value="neon-purple">Neon Purple</option>
+                                </select>
+                            </div>
+                            <div class="pt-2">
+                                <button onclick="saveSettings()" id="btn-save-settings" class="w-full bg-[var(--accent)] hover:opacity-90 text-white font-bold py-2.5 rounded-lg text-xs transition-all cursor-pointer">
+                                    <i class="fa-solid fa-floppy-disk mr-2"></i> Zapisz Ustawienia
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -575,619 +532,385 @@
         </div>
     </main>
 
-    <div class="mobile-bottom-nav md:hidden fixed bottom-0 left-0 right-0 h-16 z-50 flex items-center justify-around px-2">
-        <button onclick="switchTab('dashboard')" id="btn-mobile-dashboard" class="flex flex-col items-center justify-center flex-1 py-1 text-[var(--accent)] transition-all">
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="md:hidden mobile-bottom-nav fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center py-2">
+        <button onclick="switchTab('dashboard')" id="btn-mobile-dashboard" class="flex flex-col items-center gap-1 text-[var(--accent)] text-xs">
             <i class="fa-solid fa-gauge text-lg"></i>
-            <span class="text-[10px] mt-0.5 font-medium">Dashboard</span>
+            <span>Główna</span>
         </button>
-        <button onclick="switchTab('journal')" id="btn-mobile-journal" class="flex flex-col items-center justify-center flex-1 py-1 text-[var(--text-muted)] transition-all">
+        <button onclick="switchTab('journal')" id="btn-mobile-journal" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
             <i class="fa-solid fa-book text-lg"></i>
-            <span class="text-[10px] mt-0.5 font-medium">Dziennik</span>
+            <span>Dziennik</span>
         </button>
-        <button onclick="switchTab('calendar')" id="btn-mobile-calendar" class="flex flex-col items-center justify-center flex-1 py-1 text-[var(--text-muted)] transition-all">
+        <button onclick="switchTab('calendar')" id="btn-mobile-calendar" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
             <i class="fa-solid fa-calendar-days text-lg"></i>
-            <span class="text-[10px] mt-0.5 font-medium">Kalendarz</span>
+            <span>Kalendarz</span>
         </button>
-        <button onclick="switchTab('settings')" id="btn-mobile-settings" class="flex flex-col items-center justify-center flex-1 py-1 text-[var(--text-muted)] transition-all">
+        <button onclick="switchTab('settings')" id="btn-mobile-settings" class="flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs">
             <i class="fa-solid fa-gear text-lg"></i>
-            <span class="text-[10px] mt-0.5 font-medium">Ustawienia</span>
+            <span>Ustawienia</span>
         </button>
-    </div>
+    </nav>
 
+    <!-- ENGINE SCRIPTS -->
     <script>
-        // ========================================
-        // SUPABASE CONNECTION DATA CONFIGURATION
-        // ========================================
-        const SUPABASE_URL = "https://svmepxuwnvwyayeabdgm.supabase.co";
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2bWVweHV3bnZ3eWF5ZWFiZGdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMDI5MTIsImV4cCI6MjA5NDc3ODkxMn0.K4a2vQ6lXFJ2f7_VGld72iApvUNr9ubnQP9O2xfv6Vc";
+        // --- KONFIGURACJA SUPABASE ---
+        // Tutaj wpisz swoje poprawne dane URL i KLUCZA z ustawień Supabase API
+        const SUPABASE_URL = "https://your-supabase-url.supabase.co"; 
+        const SUPABASE_ANON_KEY = "your-anon-key";
 
-        let supabaseClient = null;
-        let isSupabaseActive = false;
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Central State Management Engine
-        let appState = {
-            trades: [],
-            settings: {
-                capital: 10000,
-                theme: "dark-pro",
-                broker: "TradingView Broker",
-                currency: "USD",
-                name: "Trader Pro Account"
-            },
-            currentTab: "dashboard",
-            currentCalendarMonth: new Date()
+        // --- STAN APLIKACJI ---
+        let tradesData = [];
+        let currentSettings = {
+            profile_name: "Trader Pro Account",
+            initial_capital: 10000,
+            broker: "TradingView Broker",
+            theme: "dark-pro"
         };
+        let currentDashboardFilter = 'all';
+        let currentCalendarDate = new Date(2026, 4, 1); // Ustawiony maj 2026 r.
+        let myChartInstance = null;
 
-        // Chart.js global single instance placeholder
-        let equityChartInstance = null;
-
-        // Initialize application on loading
+        // --- INICJALIZACJA ---
         window.addEventListener('DOMContentLoaded', async () => {
-            initSupabase();
-            loadLocalStorageDataFallback();
-            if (isSupabaseActive) {
-                await syncDataFromSupabase();
-            }
-            applyTheme(appState.settings.theme);
-            initializeUIDataFields();
-            renderDashboard();
-            
-            // Watch for connectivity changes to perform synchronization
-            window.addEventListener('online', handleOnlineSyncEvent);
-            window.addEventListener('offline', handleOfflineSyncEvent);
-            updateConnectionStatusBadges();
+            updateSyncStatus(false, "Łączenie...");
+            await loadSettings();
+            await loadTrades();
+            updateSyncStatus(true, "Zsynchronizowano");
         });
 
-        // Initialize Supabase Client Connection Engine
-        function initSupabase() {
-            if (SUPABASE_URL !== "WPISZ_URL" && SUPABASE_ANON_KEY !== "WPISZ_ANON_KEY") {
-                try {
-                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    isSupabaseActive = true;
-                    setupSupabaseRealtimeSubscriptions();
-                } catch (error) {
-                    console.error("Supabase Initialization Failed, using fallback: ", error);
-                    isSupabaseActive = false;
-                }
-            } else {
-                isSupabaseActive = false;
-            }
-        }
-
-        // Setup real-time listening synchronization hooks
-        function setupSupabaseRealtimeSubscriptions() {
-            if (!supabaseClient) return;
-            supabaseClient.channel('public:trades')
-                .on('postgres_changes', { event: '*', schema: 'public', table: 'trades' }, async () => {
-                    await syncDataFromSupabase();
-                    refreshActiveTabUI();
-                }).subscribe();
-        }
-
-        // Backup and load fallback operations
-        function loadLocalStorageDataFallback() {
-            const savedTrades = localStorage.getItem('trader_pro_trades');
-            const savedSettings = localStorage.getItem('trader_pro_settings');
+        function updateSyncStatus(connected, text) {
+            const iconD = document.getElementById('sync-status-icon');
+            const textD = document.getElementById('sync-status-text');
+            const iconM = document.getElementById('mobile-sync-icon');
+            const textM = document.getElementById('mobile-sync-text');
             
-            if (savedTrades) {
-                appState.trades = JSON.parse(savedTrades);
+            if(connected) {
+                if(iconD) iconD.className = "w-3 h-3 rounded-full bg-emerald-500";
+                if(iconM) iconM.className = "w-2 h-2 rounded-full bg-emerald-500";
             } else {
-                // Seed data to make the initial view magnificent if completely empty
-                appState.trades = [
-                    { id: "1", instrument: "EURUSD", entry_price: 1.0850, exit_price: 1.0920, profit_usd: 350, strategy: "FVG", lot_size: 0.5, created_at: "2026-05-10" },
-                    { id: "2", instrument: "BTCUSD", entry_price: 62000, exit_price: 64500, profit_usd: 1250, strategy: "ATH", lot_size: 0.2, created_at: "2026-05-12" },
-                    { id: "3", instrument: "GBPUSD", entry_price: 1.2640, exit_price: 1.2610, profit_usd: -150, strategy: "Scalping", lot_size: 1.0, created_at: "2026-05-15" },
-                    { id: "4", instrument: "USDCAD", entry_price: 1.3620, exit_price: 1.3690, profit_usd: 480, strategy: "FVG", lot_size: 0.8, created_at: "2026-05-18" },
-                    { id: "5", instrument: "XAUUSD", entry_price: 2350, exit_price: 2335, profit_usd: -520, strategy: "Scalping", lot_size: 0.4, created_at: "2026-05-19" }
-                ];
-                saveToLocalStorage();
+                if(iconD) iconD.className = "w-3 h-3 rounded-full bg-amber-500";
+                if(iconM) iconM.className = "w-2 h-2 rounded-full bg-amber-500";
             }
+            if(textD) textD.innerText = text;
+            if(textM) textM.innerText = text;
+        }
 
-            if (savedSettings) {
-                appState.settings = JSON.parse(savedSettings);
-            } else {
-                saveToLocalStorage();
+        // --- OBSŁUGA NABIGACJI ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Aktywacja stylów przycisków na desktopie
+            document.querySelectorAll('.sidebar .nav-item').forEach(btn => {
+                btn.className = "nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] hover:bg-[var(--bg-card)]";
+            });
+            const activeDeskBtn = document.getElementById(`btn-desktop-${tabId}`);
+            if(activeDeskBtn) activeDeskBtn.className = "nav-item w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200 font-medium text-[var(--text-main)] bg-[var(--border-color)]";
+
+            // Aktywacja stylów przycisków na telefonie
+            document.querySelectorAll('.mobile-bottom-nav button').forEach(btn => {
+                btn.className = "flex flex-col items-center gap-1 text-[var(--text-muted)] text-xs";
+            });
+            const activeMobBtn = document.getElementById(`btn-mobile-${tabId}`);
+            if(activeMobBtn) activeMobBtn.className = "flex flex-col items-center gap-1 text-[var(--accent)] text-xs";
+
+            if (tabId === 'dashboard') {
+                setTimeout(renderCharts, 50);
+            } else if (tabId === 'calendar') {
+                renderCalendar();
             }
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem('trader_pro_trades', JSON.stringify(appState.trades));
-            localStorage.setItem('trader_pro_settings', JSON.stringify(appState.settings));
-        }
-
-        // Supabase Database Cloud Sync Engines
-        async function syncDataFromSupabase() {
-            if (!isSupabaseActive || !supabaseClient) return;
+        // --- OBSŁUGA BAZY DANYCH (SUPABASE) ---
+        async function loadSettings() {
             try {
-                const { data: tradesData, error: tradesError } = await supabaseClient.from('trades').select('*').order('created_at', { ascending: false });
-                const { data: settingsData, error: settingsError } = await supabaseClient.from('settings').select('*').maybeSingle();
-
-                if (!tradesError && tradesData) {
-                    appState.trades = tradesData.map(t => ({
-                        id: t.id,
-                        instrument: t.instrument,
-                        entry_price: parseFloat(t.entry_price),
-                        exit_price: parseFloat(t.exit_price),
-                        profit_usd: parseFloat(t.profit_usd),
-                        strategy: t.strategy,
-                        lot_size: parseFloat(t.lot_size),
-                        created_at: t.created_at.split('T')[0]
-                    }));
+                const { data, error } = await supabaseClient.from('settings').select('*').eq('id', 1).maybeSingle();
+                if (error) throw error;
+                if (data) {
+                    currentSettings = data;
+                    document.getElementById('set-profile-name').value = data.profile_name;
+                    document.getElementById('set-initial-capital').value = data.initial_capital;
+                    document.getElementById('set-broker').value = data.broker;
+                    document.getElementById('set-theme').value = data.theme;
+                    applyTheme(data.theme);
                 }
+            } catch (err) {
+                console.error("Błąd ładowania ustawień:", err);
+            }
+        }
+
+        async function saveSettings() {
+            const btn = document.getElementById('btn-save-settings');
+            btn.disabled = true;
+            btn.innerText = "Zapisywanie...";
+            
+            const profile_name = document.getElementById('set-profile-name').value;
+            const initial_capital = parseFloat(document.getElementById('set-initial-capital').value) || 0;
+            const broker = document.getElementById('set-broker').value;
+            const theme = document.getElementById('set-theme').value;
+
+            try {
+                const { error } = await supabaseClient.from('settings').upsert({
+                    id: 1, profile_name, initial_capital, broker, theme
+                });
+                if (error) throw error;
                 
-                if (!settingsError && settingsData) {
-                    appState.settings = {
-                        capital: parseFloat(settingsData.capital),
-                        theme: settingsData.theme,
-                        broker: settingsData.broker,
-                        currency: settingsData.currency,
-                        name: appState.settings.name
-                    };
+                currentSettings = { profile_name, initial_capital, broker, theme };
+                applyTheme(theme);
+                calculateStats();
+                alert("Ustawienia zostały zapisane i zsynchronizowane!");
+            } catch (err) {
+                alert("Błąd zapisu danych w chmurze.");
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-floppy-disk mr-2"></i> Zapisz Ustawienia`;
+            }
+        }
+
+        function applyTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            setTimeout(renderCharts, 100);
+        }
+
+        async function loadTrades() {
+            try {
+                const { data, error } = await supabaseClient.from('trades').select('*').order('date', { ascending: true });
+                if (error) throw error;
+                tradesData = data || [];
+                calculateStats();
+                renderDashboardRecentTrades();
+                renderJournalTable();
+            } catch (err) {
+                console.error("Błąd ładowania transakcji:", err);
+            }
+        }
+
+        async function handleTradeSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('form-trade-id').value;
+            const tradePayload = {
+                instrument: document.getElementById('form-instrument').value,
+                entry_price: parseFloat(document.getElementById('form-entry-price').value),
+                exit_price: parseFloat(document.getElementById('form-exit-price').value),
+                profit: parseFloat(document.getElementById('form-profit').value),
+                lot_size: parseFloat(document.getElementById('form-lot-size').value),
+                strategy: document.getElementById('form-strategy').value,
+                date: document.getElementById('form-date').value
+            };
+
+            updateSyncStatus(false, "Wysyłanie...");
+            try {
+                if(id) {
+                    const { error } = await supabaseClient.from('trades').update(tradePayload).eq('id', id);
+                    if (error) throw error;
+                } else {
+                    const { error } = await supabaseClient.from('trades').insert([tradePayload]);
+                    if (error) throw error;
                 }
-                saveToLocalStorage();
-            } catch (err) {
-                console.error("Cloud synchronization fetching crashed: ", err);
-            }
-        }
-
-        async function pushTradeToCloudSupabase(trade) {
-            if (!isSupabaseActive || !supabaseClient) return;
-            try {
-                const cloudPayload = {
-                    id: trade.id.length > 10 ? trade.id : undefined, // let Supabase auto-gen if short local mock id
-                    instrument: trade.instrument,
-                    entry_price: trade.entry_price,
-                    exit_price: trade.exit_price,
-                    profit_usd: trade.profit_usd,
-                    strategy: trade.strategy,
-                    lot_size: trade.lot_size,
-                    created_at: new Date(trade.created_at).toISOString()
-                };
-                await supabaseClient.from('trades').upsert(cloudPayload);
-                await pushStatsToCloudSupabase();
-            } catch (err) {
-                console.error("Cloud operation insertion failed, saved locally: ", err);
-            }
-        }
-
-        async function deleteTradeFromCloudSupabase(tradeId) {
-            if (!isSupabaseActive || !supabaseClient) return;
-            try {
-                await supabaseClient.from('trades').delete().eq('id', tradeId);
-                await pushStatsToCloudSupabase();
-            } catch (err) {
-                console.error("Cloud destruction processing failed: ", err);
-            }
-        }
-
-        async function pushStatsToCloudSupabase() {
-            if (!isSupabaseActive || !supabaseClient) return;
-            const metrics = calculateMetricsEngine(appState.trades);
-            try {
-                await supabaseClient.from('stats').upsert({
-                    winrate: metrics.winrate,
-                    total_profit: metrics.totalProfit,
-                    total_trades: metrics.totalTrades,
-                    avg_profit: metrics.avgProfit,
-                    avg_loss: metrics.avgLoss,
-                    profit_factor: metrics.profitFactor
-                });
-            } catch (err) {
-                console.log(err);
-            }
-        }
-
-        async function pushSettingsToCloudSupabase() {
-            if (!isSupabaseActive || !supabaseClient) return;
-            try {
-                await supabaseClient.from('settings').upsert({
-                    capital: appState.settings.capital,
-                    theme: appState.settings.theme,
-                    broker: appState.settings.broker,
-                    currency: appState.settings.currency
-                });
-            } catch (err) {
+                resetTradeForm();
+                await loadTrades();
+                updateSyncStatus(true, "Zsynchronizowano");
+            } catch(err) {
+                alert("Nie udało się zapisać transakcji.");
                 console.error(err);
             }
         }
 
-        // Connection Management Events Handling
-        async function handleOnlineSyncEvent() {
-            updateConnectionStatusBadges();
-            if (isSupabaseActive) {
-                // Sync settings
-                await pushSettingsToCloudSupabase();
-                // Push all local items sequence
-                for (let trade of appState.trades) {
-                    await pushTradeToCloudSupabase(trade);
-                }
-                await syncDataFromSupabase();
-                refreshActiveTabUI();
+        async function deleteTrade(id) {
+            if(!confirm("Czy na pewno chcesz usunąć tę transakcję?")) return;
+            updateSyncStatus(false, "Usuwanie...");
+            try {
+                const { error } = await supabaseClient.from('trades').delete().eq('id', id);
+                if (error) throw error;
+                await loadTrades();
+                updateSyncStatus(true, "Zsynchronizowano");
+            } catch(err) {
+                console.error(err);
             }
         }
 
-        function handleOfflineSyncEvent() {
-            updateConnectionStatusBadges();
-        }
+        // --- APALITYKA I KALKULACJE ---
+        function calculateStats() {
+            const initCap = currentSettings.initial_capital;
+            document.getElementById('stat-initial-capital').innerText = initCap.toLocaleString('pl-PL');
 
-        function updateConnectionStatusBadges() {
-            const connected = navigator.onLine && isSupabaseActive;
-            const text = connected ? "Supabase Chmura" : "Tryb Lokalny Offline";
-            const colorClass = connected ? "bg-emerald-500" : "bg-amber-500";
-            
-            document.getElementById('sync-status-icon').className = `w-3 h-3 rounded-full ${colorClass}`;
-            document.getElementById('sync-status-text').innerText = text;
+            let totalProfit = 0;
+            let wins = 0;
+            let tradesCount = tradesData.length;
 
-            document.getElementById('mobile-sync-icon').className = `w-2 h-2 rounded-full ${colorClass}`;
-            document.getElementById('mobile-sync-text').innerText = text;
-        }
-
-        // ========================================
-        // TAB CONTROLLER ACTIONS
-        // ========================================
-        function switchTab(tabId) {
-            appState.currentTab = tabId;
-            
-            // Toggle visual screens visibility
-            document.querySelectorAll('.tab-content').forEach(element => {
-                element.classList.add('hidden');
-            });
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
-            // Manage navigation accents highlighting (Desktop)
-            document.querySelectorAll('.sidebar .nav-item').forEach(button => {
-                button.classList.remove('text-[var(--accent)]', 'bg-[var(--border-color)]');
-                button.classList.add('text-[var(--text-muted)]');
-            });
-            const activeDesktopBtn = document.getElementById(`btn-desktop-${tabId}`);
-            if (activeDesktopBtn) {
-                activeDesktopBtn.classList.remove('text-[var(--text-muted)]');
-                activeDesktopBtn.classList.add('text-[var(--accent)]', 'bg-[var(--border-color)]');
-            }
-
-            // Manage navigation accents highlighting (Mobile)
-            document.querySelectorAll('.mobile-bottom-nav button').forEach(button => {
-                button.classList.remove('text-[var(--accent)]');
-                button.classList.add('text-[var(--text-muted)]');
-            });
-            const activeMobileBtn = document.getElementById(`btn-mobile-${tabId}`);
-            if (activeMobileBtn) {
-                activeMobileBtn.classList.remove('text-[var(--text-muted)]');
-                activeMobileBtn.classList.add('text-[var(--accent)]');
-            }
-
-            refreshActiveTabUI();
-        }
-
-        function refreshActiveTabUI() {
-            updateCurrencyLabels();
-            if (appState.currentTab === "dashboard") {
-                renderDashboard();
-            } else if (appState.currentTab === "journal") {
-                renderJournalTable();
-            } else if (appState.currentTab === "calendar") {
-                renderCalendar();
-            } else if (appState.currentTab === "settings") {
-                initializeUIDataFields();
-            }
-        }
-
-        // Initialize Settings / profile items configuration labels
-        function initializeUIDataFields() {
-            document.getElementById('set-profile-name').value = appState.settings.name;
-            document.getElementById('set-initial-capital').value = appState.settings.capital;
-            document.getElementById('set-broker').value = appState.settings.broker;
-            document.getElementById('set-currency').value = appState.settings.currency;
-            updateCurrencyLabels();
-        }
-
-        function updateCurrencyLabels() {
-            document.querySelectorAll('.user-currency').forEach(el => {
-                el.innerText = appState.settings.currency;
-            });
-        }
-
-        function saveProfileSettings() {
-            appState.settings.name = document.getElementById('set-profile-name').value;
-            appState.settings.capital = parseFloat(document.getElementById('set-initial-capital').value) || 0;
-            appState.settings.broker = document.getElementById('set-broker').value;
-            appState.settings.currency = document.getElementById('set-currency').value;
-            
-            saveToLocalStorage();
-            pushSettingsToCloudSupabase();
-            alert("Profil zaktualizowany pomyślnie.");
-            refreshActiveTabUI();
-        }
-
-        // Theme Core Switch Engine
-        function applyTheme(themeName) {
-            appState.settings.theme = themeName;
-            document.documentElement.setAttribute('data-theme', themeName);
-            
-            // Manage UI selected accents
-            document.querySelectorAll('[id^="theme-btn-"]').forEach(btn => {
-                btn.classList.remove('border-[var(--accent)]', 'bg-[var(--bg-card)]');
-            });
-            const activeThemeBtn = document.getElementById(`theme-btn-${themeName}`);
-            if (activeThemeBtn) {
-                activeThemeBtn.classList.add('border-[var(--accent)]', 'bg-[var(--bg-card)]');
-            }
-            saveToLocalStorage();
-            pushSettingsToCloudSupabase();
-            
-            // Re-render charts to adapt colors beautifully
-            if (appState.currentTab === "dashboard") {
-                renderDashboard();
-            }
-        }
-
-        // ========================================
-        // COMPONENT 1: DASHBOARD VISUALIZATIONS
-        // ========================================
-        let currentDashboardTimelineFilter = 'all';
-
-        function filterDashboardData(filterRange) {
-            currentDashboardTimelineFilter = filterRange;
-            document.querySelectorAll('[id^="filter-dash-"]').forEach(el => {
-                el.className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-muted-theme";
-            });
-            const selectedFilterBtn = document.getElementById(`filter-dash-${filterRange}`);
-            if (selectedFilterBtn) {
-                selectedFilterBtn.className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--text-main)] bg-[var(--bg-card)] border border-theme";
-            }
-            renderDashboard();
-        }
-
-        function getFilteredTrades(trades, filter) {
-            if (filter === 'all') return [...trades].sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
-            const now = new Date();
-            let cutoffDate = new Date();
-
-            if (filter === 'day') cutoffDate.setDate(now.getDate() - 1);
-            else if (filter === 'week') cutoffDate.setDate(now.getDate() - 7);
-            else if (filter === 'month') cutoffDate.setMonth(now.getMonth() - 1);
-
-            return trades.filter(t => new Date(t.created_at) >= cutoffDate).sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
-        }
-
-        function renderDashboard() {
-            const sortedTimelineTrades = getFilteredTrades(appState.trades, currentDashboardTimelineFilter);
-            const globalMetrics = calculateMetricsEngine(appState.trades); // metrics for general cards
-
-            // Inject Top Summary Metrics Data
-            document.getElementById('stat-initial-capital').innerText = appState.settings.capital.toLocaleString();
-            document.getElementById('stat-current-capital').innerText = (appState.settings.capital + globalMetrics.totalProfit).toLocaleString();
-            
-            const totalProfitEl = document.getElementById('stat-total-profit');
-            totalProfitEl.innerText = (globalMetrics.totalProfit >= 0 ? "+" : "") + globalMetrics.totalProfit.toLocaleString();
-            totalProfitEl.className = `text-lg md:text-xl font-bold ${globalMetrics.totalProfit >= 0 ? "text-profit" : "text-loss"}`;
-
-            const profitPercentEl = document.getElementById('stat-profit-percent');
-            const calculatedPercent = appState.settings.capital > 0 ? (globalMetrics.totalProfit / appState.settings.capital) * 100 : 0;
-            profitPercentEl.innerText = (calculatedPercent >= 0 ? "+" : "") + calculatedPercent.toFixed(1) + "%";
-            profitPercentEl.className = `text-lg md:text-xl font-bold ${calculatedPercent >= 0 ? "text-profit" : "text-loss"}`;
-
-            document.getElementById('stat-total-trades').innerText = globalMetrics.totalTrades;
-            document.getElementById('stat-winrate').innerText = globalMetrics.winrate.toFixed(1) + "%";
-
-            // Draw Premium Charting Logic
-            renderEquityCurveChart(sortedTimelineTrades);
-
-            // Strategy Matrix Render
-            renderStrategyMatrixAnalysis();
-
-            // Render top 5 Recent Operations
-            renderRecentDashboardTradesTable();
-        }
-
-        function calculateMetricsEngine(tradesList) {
-            let totalTrades = tradesList.length;
-            let wins = tradesList.filter(t => t.profit_usd > 0);
-            let losses = tradesList.filter(t => t.profit_usd <= 0);
-            
-            let totalProfit = tradesList.reduce((acc, t) => acc + t.profit_usd, 0);
-            let winrate = totalTrades > 0 ? (wins.length / totalTrades) * 100 : 0;
-            
-            let grossProfits = wins.reduce((acc, t) => acc + t.profit_usd, 0);
-            let grossLosses = losses.reduce((acc, t) => acc + Math.abs(t.profit_usd), 0);
-            
-            let avgProfit = wins.length > 0 ? grossProfits / wins.length : 0;
-            let avgLoss = losses.length > 0 ? grossLosses / losses.length : 0;
-            let profitFactor = grossLosses > 0 ? grossProfits / grossLosses : grossProfits;
-
-            return { totalTrades, totalProfit, winrate, avgProfit, avgLoss, profitFactor };
-        }
-
-        function renderEquityCurveChart(sortedTrades) {
-            const canvasCtx = document.getElementById('equityChart').getContext('2d');
-            if (equityChartInstance) {
-                equityChartInstance.destroy();
-            }
-
-            // Generate analytical data points arrays
-            let runningCapital = appState.settings.capital;
-            let chartLabels = ['Start'];
-            let chartDataPoints = [runningCapital];
-
-            sortedTrades.forEach((trade, index) => {
-                runningCapital += trade.profit_usd;
-                chartLabels.push(`#${index + 1} (${trade.instrument})`);
-                chartDataPoints.push(runningCapital);
+            tradesData.forEach(t => {
+                totalProfit += t.profit;
+                if(t.profit > 0) wins++;
             });
 
-            const cssAccentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
-            const cssGlowColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-glow').trim();
-            const cssTextMain = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
-            const cssBorderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+            const currentCap = initCap + totalProfit;
+            const profitPct = initCap > 0 ? (totalProfit / initCap) * 100 : 0;
+            const winrate = tradesCount > 0 ? (wins / tradesCount) * 100 : 0;
 
-            equityChartInstance = new Chart(canvasCtx, {
-                type: 'line',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{
-                        label: 'Stan Salda Konta',
-                        data: chartDataPoints,
-                        borderColor: cssAccentColor,
-                        backgroundColor: cssGlowColor,
-                        fill: true,
-                        tension: 0.2,
-                        borderWidth: 2.5,
-                        pointBackgroundColor: cssAccentColor,
-                        pointRadius: chartDataPoints.length > 50 ? 0 : 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: cssBorderColor },
-                            ticks: { color: cssTextMain, font: { size: 10 } }
-                        },
-                        y: {
-                            grid: { color: cssBorderColor },
-                            ticks: { color: cssTextMain, font: { size: 10 } }
-                        }
-                    }
-                }
-            });
+            document.getElementById('stat-current-capital').innerText = currentCap.toLocaleString('pl-PL');
+            
+            const profEl = document.getElementById('stat-total-profit');
+            profEl.innerText = (totalProfit >= 0 ? "+" : "") + totalProfit.toLocaleString('pl-PL');
+            profEl.className = `text-lg md:text-xl font-bold ${totalProfit >= 0 ? 'text-profit' : 'text-loss'}`;
+
+            const pctEl = document.getElementById('stat-profit-percent');
+            pctEl.innerText = (profitPct >= 0 ? "+" : "") + profitPct.toFixed(1) + "%";
+            pctEl.className = `text-lg md:text-xl font-bold ${profitPct >= 0 ? 'text-profit' : 'text-loss'}`;
+
+            document.getElementById('stat-total-trades').innerText = tradesCount;
+            document.getElementById('stat-winrate').innerText = winrate.toFixed(1) + "%";
+
+            renderStrategyAnalytics();
         }
 
-        function renderStrategyMatrixAnalysis() {
-            const strategies = ['ATH', 'FVG', 'Scalping'];
+        function renderStrategyAnalytics() {
             const container = document.getElementById('strategy-analytics-container');
+            if(!container) return;
+            
+            const strategies = ['ATH', 'FVG', 'Scalping'];
             container.innerHTML = '';
 
-            strategies.forEach(strategy => {
-                const stratTrades = appState.trades.filter(t => t.strategy === strategy);
-                const metrics = calculateMetricsEngine(stratTrades);
-                
-                const profitsArray = stratTrades.map(t => t.profit_usd);
-                const bestResult = profitsArray.length > 0 ? Math.max(...profitsArray) : 0;
-                const worstResult = profitsArray.length > 0 ? Math.min(...profitsArray) : 0;
-                const totalStratProfit = profitsArray.reduce((a,b) => a+b, 0);
+            strategies.forEach(strat => {
+                const stratTrades = tradesData.filter(t => t.strategy === strat);
+                let profit = 0;
+                let wins = 0;
+                stratTrades.forEach(t => {
+                    profit += t.profit;
+                    if(t.profit > 0) wins++;
+                });
+                const wr = stratTrades.length > 0 ? (wins / stratTrades.length) * 100 : 0;
 
                 container.innerHTML += `
-                    <div class="bg-[var(--bg-main)] p-3 rounded-xl border border-theme space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-xs uppercase text-[var(--accent)]">${strategy}</span>
-                            <span class="text-xs font-bold ${totalStratProfit >=0 ? 'text-profit':'text-loss'}">${totalStratProfit >= 0 ? '+':''}${totalStratProfit.toLocaleString()} ${appState.settings.currency}</span>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-semibold">${strat} (${stratTrades.length} pozycji)</span>
+                            <span class="${profit >= 0 ? 'text-profit' : 'text-loss'} font-bold">${profit >= 0 ? '+' : ''}${profit.toFixed(2)} USD</span>
                         </div>
-                        <div class="w-full bg-[var(--border-color)] h-1.5 rounded-full overflow-hidden">
-                            <div class="bg-[var(--accent)] h-1.5 rounded-full" style="width: ${metrics.winrate}%"></div>
+                        <div class="w-full bg-[var(--bg-main)] h-2 rounded-full overflow-hidden border border-theme">
+                            <div class="accent-bg h-full" style="width: ${wr}%"></div>
                         </div>
-                        <div class="grid grid-cols-4 gap-1 text-[10px] text-center text-muted-theme">
-                            <div>
-                                <p class="font-semibold text-[var(--text-main)]">${metrics.totalTrades}</p>
-                                <p>Trades</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-profit">${metrics.winrate.toFixed(0)}%</p>
-                                <p>Winrate</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-profit">+${bestResult.toFixed(0)}</p>
-                                <p>Najlepszy</p>
-                            </div>
-                            <div>
-                                <p class="font-semibold text-loss">${worstResult.toFixed(0)}</p>
-                                <p>Najgorszy</p>
-                            </div>
+                        <div class="flex justify-between text-[10px] text-muted-theme mt-0.5">
+                            <span>Winrate</span>
+                            <span>${wr.toFixed(1)}%</span>
                         </div>
                     </div>
                 `;
             });
         }
 
-        function renderRecentDashboardTradesTable() {
-            const tableBody = document.getElementById('dashboard-recent-trades');
-            tableBody.innerHTML = '';
+        function renderDashboardRecentTrades() {
+            const tbody = document.getElementById('dashboard-recent-trades');
+            if(!tbody) return;
+            tbody.innerHTML = '';
             
-            // Slice the latest 5 trades executed
-            const recent = [...appState.trades].sort((a,b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
-            
-            if (recent.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted-theme">Brak zarejestrowanych transakcji</td></tr>`;
-                return;
-            }
-
-            recent.forEach(trade => {
-                tableBody.innerHTML += `
-                    <tr class="border-b border-theme/50 last:border-0">
-                        <td class="py-2.5 font-bold">${trade.instrument}</td>
-                        <td class="py-2.5"><span class="px-1.5 py-0.5 rounded text-[10px] bg-[var(--border-color)] font-medium">${trade.strategy}</span></td>
-                        <td class="py-2.5 text-muted-theme">${trade.lot_size} LOT</td>
-                        <td class="py-2.5 text-right font-semibold ${trade.profit_usd >= 0 ? 'text-profit':'text-loss'}">
-                            ${trade.profit_usd >= 0 ? '+':''}${trade.profit_usd.toLocaleString()}
-                        </td>
+            const recents = [...tradesData].substring ? [] : tradesData.slice(-5).reverse();
+            recents.forEach(t => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-theme/50 hover:bg-[var(--bg-sidebar)]/30">
+                        <td class="py-2.5 font-medium">${t.instrument}</td>
+                        <td class="py-2.5 text-muted-theme">${t.strategy}</td>
+                        <td class="py-2.5">${t.lot_size}</td>
+                        <td class="py-2.5 text-right font-bold ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
                     </tr>
                 `;
             });
         }
 
-        // ========================================
-        // COMPONENT 2: TRADER JOURNAL CONTROLS
-        // ========================================
-        function handleTradeSubmit(e) {
-            e.preventDefault();
-            const idField = document.getElementById('form-trade-id').value;
-            
-            const newTradeData = {
-                id: idField ? idField : Date.now().toString(),
-                instrument: document.getElementById('form-instrument').value.toUpperCase(),
-                entry_price: parseFloat(document.getElementById('form-entry-price').value) || 0,
-                exit_price: parseFloat(document.getElementById('form-exit-price').value) || 0,
-                profit_usd: parseFloat(document.getElementById('form-profit').value) || 0,
-                lot_size: parseFloat(document.getElementById('form-lot-size').value) || 0,
-                strategy: document.getElementById('form-strategy').value,
-                created_at: document.getElementById('form-date').value
-            };
+        // --- INTERFEJS DZIENNIKA ---
+        function renderJournalTable() {
+            const tbody = document.getElementById('journal-table-body');
+            const emptyState = document.getElementById('journal-empty-state');
+            if(!tbody) return;
 
-            if (idField) {
-                // Edit existing trade row element
-                const index = appState.trades.findIndex(t => t.id === idField);
-                if (index !== -1) appState.trades[index] = newTradeData;
-            } else {
-                // Add completely new trade records
-                appState.trades.push(newTradeData);
+            const fStrat = document.getElementById('filter-strategy').value;
+            const fInst = document.getElementById('filter-instrument').value.toUpperCase();
+            const fDate = document.getElementById('filter-date').value;
+
+            let filtered = tradesData.filter(t => {
+                if(fStrat !== 'ALL' && t.strategy !== fStrat) return false;
+                if(fInst && !t.instrument.toUpperCase().includes(fInst)) return false;
+                if(fDate && !t.date.startsWith(fDate)) return false;
+                return true;
+            });
+
+            tbody.innerHTML = '';
+            if(filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                updateJournalCalculations([]);
+                return;
             }
+            emptyState.classList.add('hidden');
 
-            saveToLocalStorage();
-            pushTradeToCloudSupabase(newTradeData);
-            resetTradeForm();
-            renderJournalTable();
-            alert("Pozycja zapisana poprawnie.");
+            filtered.forEach(t => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-theme hover:bg-[var(--bg-sidebar)]/50 transition-all">
+                        <td class="py-3 px-2 whitespace-nowrap">${t.date}</td>
+                        <td class="py-3 px-2 font-bold">${t.instrument}</td>
+                        <td class="py-3 px-2"><span class="px-2 py-0.5 bg-[var(--bg-main)] border border-theme rounded text-[10px]">${t.strategy}</span></td>
+                        <td class="py-3 px-2 text-muted-theme">${t.entry_price}</td>
+                        <td class="py-3 px-2 text-muted-theme">${t.exit_price}</td>
+                        <td class="py-3 px-2">${t.lot_size}</td>
+                        <td class="py-3 px-2 text-right font-bold ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
+                        <td class="py-3 px-2 text-center space-x-1 whitespace-nowrap">
+                            <button onclick="editTrade('${t.id}')" class="text-blue-400 hover:text-blue-300 p-1 cursor-pointer"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteTrade('${t.id}')" class="text-rose-400 hover:text-rose-300 p-1 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            updateJournalCalculations(filtered);
         }
 
-        function editTradeAction(id) {
-            const targetTrade = appState.trades.find(t => t.id === id);
-            if (!targetTrade) return;
+        function updateJournalCalculations(list) {
+            let total = 0, wins = 0, totalLoss = 0, totalGain = 0, winsCount = 0, lossCount = 0;
+            list.forEach(t => {
+                total += t.profit;
+                if(t.profit > 0) {
+                    winsCount++;
+                    totalGain += t.profit;
+                } else {
+                    lossCount++;
+                    totalLoss += Math.abs(t.profit);
+                }
+            });
 
-            document.getElementById('form-trade-id').value = targetTrade.id;
-            document.getElementById('form-instrument').value = targetTrade.instrument;
-            document.getElementById('form-entry-price').value = targetTrade.entry_price;
-            document.getElementById('form-exit-price').value = targetTrade.exit_price;
-            document.getElementById('form-profit').value = targetTrade.profit_usd;
-            document.getElementById('form-lot-size').value = targetTrade.lot_size;
-            document.getElementById('form-strategy').value = targetTrade.strategy;
-            document.getElementById('form-date').value = targetTrade.created_at;
+            const wr = list.length > 0 ? (winsCount / list.length) * 100 : 0;
+            const avgProfit = winsCount > 0 ? totalGain / winsCount : 0;
+            const avgLoss = lossCount > 0 ? totalLoss / lossCount : 0;
+            const pf = totalLoss > 0 ? totalGain / totalLoss : totalGain > 0 ? totalGain : 0;
+
+            document.getElementById('journal-calc-winrate').innerText = wr.toFixed(1) + "%";
+            document.getElementById('journal-calc-avg-profit').innerText = avgProfit.toFixed(2);
+            document.getElementById('journal-calc-avg-loss').innerText = avgLoss.toFixed(2);
+            document.getElementById('journal-calc-pf').innerText = pf.toFixed(2);
+            
+            const totEl = document.getElementById('journal-calc-total');
+            totEl.innerText = total.toFixed(2);
+            totEl.className = `font-bold text-base ${total >= 0 ? 'text-profit' : 'text-loss'}`;
+        }
+
+        function editTrade(id) {
+            const item = tradesData.find(t => t.id === id);
+            if(!item) return;
+
+            document.getElementById('form-trade-id').value = item.id;
+            document.getElementById('form-instrument').value = item.instrument;
+            document.getElementById('form-entry-price').value = item.entry_price;
+            document.getElementById('form-exit-price').value = item.exit_price;
+            document.getElementById('form-profit').value = item.profit;
+            document.getElementById('form-lot-size').value = item.lot_size;
+            document.getElementById('form-strategy').value = item.strategy;
+            document.getElementById('form-date').value = item.date;
 
             document.getElementById('journal-form-title').innerText = "Edytuj Transakcję";
-            document.getElementById('form-submit-btn').innerText = "Zaktualizuj";
+            document.getElementById('form-submit-btn').innerText = "Zatwierdź Zmiany";
             document.getElementById('form-cancel-btn').classList.remove('hidden');
-        }
-
-        function deleteTradeAction(id) {
-            if (confirm("Czy na pewno chcesz bezpowrotnie usunąć wybraną transakcję?")) {
-                appState.trades = appState.trades.filter(t => t.id !== id);
-                saveToLocalStorage();
-                deleteTradeFromCloudSupabase(id);
-                renderJournalTable();
-            }
         }
 
         function resetTradeForm() {
@@ -1198,166 +921,144 @@
             document.getElementById('form-cancel-btn').classList.add('hidden');
         }
 
-        function renderJournalTable() {
-            const tableBody = document.getElementById('journal-table-body');
-            const emptyState = document.getElementById('journal-empty-state');
-            tableBody.innerHTML = '';
+        // --- WYKRES (CHART.JS) ---
+        function filterDashboardData(range) {
+            currentDashboardFilter = range;
+            document.querySelectorAll('[id^="filter-dash-"]').forEach(b => {
+                b.className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-muted-theme";
+            });
+            document.getElementById(`filter-dash-${range}`).className = "px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--text-main)] bg-[var(--bg-card)] border border-theme";
+            renderCharts();
+        }
 
-            const stratFilter = document.getElementById('filter-strategy').value;
-            const instFilter = document.getElementById('filter-instrument').value.toUpperCase();
-            const dateFilter = document.getElementById('filter-date').value; // YYYY-MM Format
+        function renderCharts() {
+            const canvas = document.getElementById('equityChart');
+            if(!canvas) return;
 
-            // Run structural data query filtering logic loops
-            let displayTrades = appState.trades.filter(trade => {
-                if (stratFilter !== 'ALL' && trade.strategy !== stratFilter) return false;
-                if (instFilter && !trade.instrument.includes(instFilter)) return false;
-                if (dateFilter && !trade.created_at.startsWith(dateFilter)) return false;
-                return true;
+            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            const gridColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim();
+            const textMain = getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim();
+
+            let balance = currentSettings.initial_capital;
+            let labels = ['Start'];
+            let dataset = [balance];
+
+            // Filtrowanie dat
+            let processedTrades = [...tradesData];
+            const modern = new Date(2026, 4, 20); // Dziś rano w 2026 r.
+
+            if (currentDashboardFilter === 'day') {
+                processedTrades = processedTrades.filter(t => new Date(t.date).toDateString() === modern.toDateString());
+            } else if (currentDashboardFilter === 'week') {
+                const oneWeekAgo = new Date(modern.getTime() - 7 * 24 * 60 * 60 * 1000);
+                processedTrades = processedTrades.filter(t => new Date(t.date) >= oneWeekAgo);
+            } else if (currentDashboardFilter === 'month') {
+                const oneMonthAgo = new Date(modern.getTime() - 30 * 24 * 60 * 60 * 1000);
+                processedTrades = processedTrades.filter(t => new Date(t.date) >= oneMonthAgo);
+            }
+
+            processedTrades.forEach(t => {
+                balance += t.profit;
+                labels.push(t.date);
+                dataset.push(balance);
             });
 
-            // Calculate Dynamic Operational Table Summaries Bar data metrics
-            const tableMetrics = calculateMetricsEngine(displayTrades);
-            document.getElementById('journal-calc-winrate').innerText = tableMetrics.winrate.toFixed(1) + "%";
-            document.getElementById('journal-calc-avg-profit').innerText = "+" + tableMetrics.avgProfit.toFixed(1);
-            document.getElementById('journal-calc-avg-loss').innerText = "-" + tableMetrics.avgLoss.toFixed(1);
-            document.getElementById('journal-calc-pf').innerText = tableMetrics.profitFactor.toFixed(2);
-            
-            const totalCalcBalanceEl = document.getElementById('journal-calc-total');
-            totalCalcBalanceEl.innerText = (tableMetrics.totalProfit >= 0 ? "+" : "") + tableMetrics.totalProfit.toLocaleString();
-            totalCalcBalanceEl.className = `font-bold text-base ${tableMetrics.totalProfit >=0 ? 'text-profit':'text-loss'}`;
+            if(myChartInstance) myChartInstance.destroy();
 
-            if (displayTrades.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            emptyState.classList.add('hidden');
-
-            // Sort displaying items newest first
-            displayTrades.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
-
-            displayTrades.forEach(trade => {
-                tableBody.innerHTML += `
-                    <tr class="border-b border-theme hover:bg-[var(--bg-sidebar)] transition-all">
-                        <td class="py-3 px-2 font-medium">${trade.created_at}</td>
-                        <td class="py-3 px-2 font-bold accent-text">${trade.instrument}</td>
-                        <td class="py-3 px-2"><span class="px-2 py-0.5 rounded text-[10px] bg-[var(--border-color)] font-semibold">${trade.strategy}</span></td>
-                        <td class="py-3 px-2 text-muted-theme">${trade.entry_price}</td>
-                        <td class="py-3 px-2 text-muted-theme">${trade.exit_price}</td>
-                        <td class="py-3 px-2">${trade.lot_size}</td>
-                        <td class="py-3 px-2 text-right font-bold ${trade.profit_usd >= 0 ? 'text-profit':'text-loss'}">
-                            ${trade.profit_usd >= 0 ? '+':''}${trade.profit_usd.toLocaleString()}
-                        </td>
-                        <td class="py-3 px-2 text-center flex items-center justify-center gap-1.5">
-                            <button onclick="editTradeAction('${trade.id}')" class="p-1 text-blue-400 hover:text-blue-200 cursor-pointer transition-all"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button onclick="deleteTradeAction('${trade.id}')" class="p-1 text-red-400 hover:text-red-200 cursor-pointer transition-all"><i class="fa-solid fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
+            myChartInstance = new Chart(canvas.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Kapitał Portfela',
+                        data: dataset,
+                        borderColor: accentColor,
+                        backgroundColor: 'rgba(41, 98, 255, 0.05)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: labels.length > 20 ? 0 : 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: gridColor }, ticks: { color: textMain, font: { size: 10 } } },
+                        y: { grid: { color: gridColor }, ticks: { color: textMain, font: { size: 10 } } }
+                    }
+                }
             });
         }
 
-        function exportToCSV() {
-            if (appState.trades.length === 0) {
-                alert("Brak dostępnych rekordów danych transakcji do wygenerowania raportu CSV.");
-                return;
-            }
-            let rows = [["Data", "Instrument", "Strategia", "Cena Wejscia", "Cena Wyjscia", "LOT", "Zarobek Strata USD"]];
-            appState.trades.forEach(t => {
-                rows.push([t.created_at, t.instrument, t.strategy, t.entry_price, t.exit_price, t.lot_size, t.profit_usd]);
-            });
-
-            let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
-            let encodedUri = encodeURI(csvContent);
-            let temporaryLink = document.createElement("a");
-            temporaryLink.setAttribute("href", encodedUri);
-            temporaryLink.setAttribute("download", `Dziennik_Tradera_Eksport_${new Date().toISOString().split('T')[0]}.csv`);
-            document.body.appendChild(temporaryLink);
-            temporaryLink.click();
-            document.body.removeChild(temporaryLink);
-        }
-
-        // ========================================
-        // COMPONENT 3: MONTHLY FINANCIAL CALENDAR
-        // ========================================
-        const monthNamesPL = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
-
-        function changeMonth(direction) {
-            appState.currentCalendarMonth.setMonth(appState.currentCalendarMonth.getMonth() + direction);
+        // --- KALENDARZ ---
+        function changeMonth(dir) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + dir);
             renderCalendar();
         }
 
         function renderCalendar() {
-            const gridContainer = document.getElementById('calendar-grid');
-            gridContainer.innerHTML = '';
+            const grid = document.getElementById('calendar-grid');
+            const header = document.getElementById('calendar-month-year');
+            if(!grid) return;
 
-            const activeYear = appState.currentCalendarMonth.getFullYear();
-            const activeMonth = appState.currentCalendarMonth.getMonth();
+            const polishMonths = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"];
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+            header.innerText = `${polishMonths[month]} ${year}`;
 
-            document.getElementById('calendar-month-year').innerText = `${monthNamesPL[activeMonth]} ${activeYear}`;
+            grid.innerHTML = '';
 
-            // Work out standard day structures grid coordinates offsets for Europe (Monday first style)
-            let firstDayIndex = new Date(activeYear, activeMonth, 1).getDay();
-            firstDayIndex = firstDayIndex === 0 ? 6 : firstDayIndex - 1; // Align Sunday correctly
+            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7; 
+            const totalDays = new Date(year, month + 1, 0).getDate();
 
-            const totalDaysInCurrentMonth = new Date(activeYear, activeMonth + 1, 0).getDate();
-
-            // Insert placeholder padding boxes for empty spaces before day 1 of month
             for (let i = 0; i < firstDayIndex; i++) {
-                gridContainer.innerHTML += `<div class="bg-transparent border border-transparent p-2"></div>`;
+                grid.innerHTML += `<div class="p-2 border border-transparent"></div>`;
             }
 
-            // Loop and draw actual day squares containers
-            for (let day = 1; day <= totalDaysInCurrentMonth; day++) {
-                const paddingString = day < 10 ? '0' + day : day;
-                const paddedMonthString = (activeMonth + 1) < 10 ? '0' + (activeMonth + 1) : (activeMonth + 1);
-                const completeISOStringKey = `${activeYear}-${paddedMonthString}-${paddingString}`;
+            for (let d = 1; d <= totalDays; d++) {
+                const dayString = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const dayTrades = tradesData.filter(t => t.date === dayString);
+                
+                let profitSum = 0;
+                dayTrades.forEach(t => profitSum += t.profit);
 
-                // Calculate total financial cumulative outcome for that day instance
-                const matches = appState.trades.filter(t => t.created_at === completeISOStringKey);
-                const dailyProfitSum = matches.reduce((acc, curr) => acc + curr.profit_usd, 0);
-
-                let conditionalColorStylingClass = "bg-transparent border-theme hover:border-[var(--accent)]";
-                if (matches.length > 0) {
-                    conditionalColorStylingClass = dailyProfitSum > 0 ? "bg-emerald-950/40 border-emerald-500 text-emerald-400" : "bg-red-950/40 border-red-500 text-red-400";
+                let badge = '';
+                let bgStyle = 'bg-[var(--bg-card)]/40';
+                if(dayTrades.length > 0) {
+                    bgStyle = profitSum >= 0 ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-rose-950/40 border-rose-500/50';
+                    badge = `<div class="text-[9px] font-bold mt-1 ${profitSum >= 0 ? 'text-profit' : 'text-loss'}">${profitSum >= 0 ? '+' : ''}${profitSum.toFixed(0)}</div>`;
                 }
 
-                gridContainer.innerHTML += `
-                    <div onclick="openCalendarDayDetailsModal('${completeISOStringKey}')" class="border p-2 rounded-xl flex flex-col justify-between min-h-[60px] md:min-h-[75px] cursor-pointer transition-all ${conditionalColorStylingClass}">
-                        <span class="text-xs font-bold">${day}</span>
-                        ${matches.length > 0 ? `
-                            <span class="text-[10px] md:text-xs font-black truncate text-right">
-                                ${dailyProfitSum > 0 ? '+':''}${dailyProfitSum.toFixed(0)}
-                            </span>
-                        ` : ''}
+                grid.innerHTML += `
+                    <div onclick="openCalendarModal('${dayString}')" class="p-2 border border-theme rounded-lg text-left flex flex-col justify-between min-h-[55px] cursor-pointer hover:border-[var(--accent)] transition-all ${bgStyle}">
+                        <span class="text-xs font-semibold text-muted-theme">${d}</span>
+                        ${badge}
                     </div>
                 `;
             }
         }
 
-        function openCalendarDayDetailsModal(isoDateString) {
+        function openCalendarModal(dateStr) {
             const modal = document.getElementById('calendar-day-modal');
-            const tableBody = document.getElementById('cal-modal-table-body');
-            document.getElementById('cal-modal-date').innerText = isoDateString;
-            tableBody.innerHTML = '';
-
-            const dayTrades = appState.trades.filter(t => t.created_at === isoDateString);
+            const titleDate = document.getElementById('cal-modal-date');
+            const tbody = document.getElementById('cal-modal-table-body');
             
-            if (dayTrades.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted-theme">Brak operacji giełdowych w wybranym dniu.</td></tr>`;
-                modal.classList.remove('hidden');
-                return;
-            }
+            const dayTrades = tradesData.filter(t => t.date === dateStr);
+            if(dayTrades.length === 0) return;
 
-            dayTrades.forEach(trade => {
-                tableBody.innerHTML += `
-                    <tr class="border-b border-theme/50 last:border-0">
-                        <td class="py-2 font-bold">${trade.instrument}</td>
-                        <td class="py-2"><span class="px-1.5 py-0.5 rounded text-[10px] bg-[var(--border-color)] font-medium">${trade.strategy}</span></td>
-                        <td class="py-2 text-muted-theme">${trade.entry_price} &rarr; ${trade.exit_price}</td>
-                        <td class="py-2">${trade.lot_size}</td>
-                        <td class="py-2 text-right font-semibold ${trade.profit_usd >= 0 ? 'text-profit':'text-loss'}">
-                            ${trade.profit_usd >= 0 ? '+':''}${trade.profit_usd.toLocaleString()}
-                        </td>
+            titleDate.innerText = dateStr;
+            tbody.innerHTML = '';
+
+            dayTrades.forEach(t => {
+                tbody.innerHTML += `
+                    <tr class="border-b border-theme/50">
+                        <td class="py-2 font-bold">${t.instrument}</td>
+                        <td class="py-2">${t.strategy}</td>
+                        <td class="py-2 text-muted-theme">${t.entry_price} / ${t.exit_price}</td>
+                        <td class="py-2">${t.lot_size}</td>
+                        <td class="py-2 text-right font-bold ${t.profit >= 0 ? 'text-profit' : 'text-loss'}">${t.profit >= 0 ? '+' : ''}${t.profit.toFixed(2)}</td>
                     </tr>
                 `;
             });
@@ -1370,80 +1071,20 @@
             document.getElementById('calendar-day-modal').classList.add('hidden');
         }
 
-        // ========================================
-        // COMPONENT 4: BACKUPS & SYSTEM HARD RESET
-        // ========================================
-        function exportBackupJSON() {
-            const backupObjectData = {
-                trades: appState.trades,
-                settings: appState.settings
-            };
-            const stringifiedData = JSON.stringify(backupObjectData, null, 2);
-            const dataBlob = new Blob([stringifiedData], { type: "application/json" });
-            const urlBlob = URL.createObjectURL(dataBlob);
-            
-            const temporaryAnchor = document.createElement("a");
-            temporaryAnchor.href = urlBlob;
-            temporaryAnchor.download = `Trader_Pro_Kopia_Zapasowa_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(temporaryAnchor);
-            temporaryAnchor.click();
-            document.body.removeChild(temporaryAnchor);
-        }
-
-        function importBackupJSON(event) {
-            const uploadedFile = event.target.files[0];
-            if (!uploadedFile) return;
-
-            const fileReader = new FileReader();
-            fileReader.onload = async function(e) {
-                try {
-                    const parsedStructure = JSON.parse(e.target.result);
-                    if (parsedStructure.trades && parsedStructure.settings) {
-                        appState.trades = parsedStructure.trades;
-                        appState.settings = parsedStructure.settings;
-                        
-                        saveToLocalStorage();
-                        // Push full records sequence upstream
-                        if (isSupabaseActive) {
-                            await pushSettingsToCloudSupabase();
-                            for (let t of appState.trades) {
-                                await pushTradeToCloudSupabase(t);
-                            }
-                        }
-                        alert("Kopia zapasowa zaimportowana pomyślnie z pełną synchronizacją portfela.");
-                        applyTheme(appState.settings.theme);
-                        refreshActiveTabUI();
-                    } else {
-                        alert("Niepoprawny format struktury pliku kopii zapasowej.");
-                    }
-                } catch (err) {
-                    alert("Wystąpił nieoczekiwany błąd podczas parsowania dokumentu JSON.");
-                }
-            };
-            fileReader.readAsText(uploadedFile);
-        }
-
-        function resetAllDataData() {
-            if (confirm("UWAGA! Czy na pewno chcesz całkowicie i permanentnie wyczyścić całą historię transakcji oraz przywrócić parametry fabryczne?")) {
-                if (isSupabaseActive && confirm("Czy chcesz również usunąć dane zapisane w bazie danych w chmurze Supabase?")) {
-                    try {
-                        supabaseClient.from('trades').delete().neq('instrument', 'ZERO_FAILSAFE');
-                    } catch(e) {}
-                }
-                localStorage.clear();
-                appState.trades = [];
-                appState.settings = {
-                    capital: 10000,
-                    theme: "dark-pro",
-                    broker: "Broker",
-                    currency: "USD",
-                    name: "Trader Account"
-                };
-                saveToLocalStorage();
-                applyTheme('dark-pro');
-                refreshActiveTabUI();
-                alert("Wszystkie dane zostały trwale wyczyszczone.");
-            }
+        // --- EXPORT CSV ---
+        function exportToCSV() {
+            if(tradesData.length === 0) return alert("Brak danych do eksportu.");
+            let csv = 'Id,Data,Instrument,Strategia,Wejscie,Wyjscie,Lot,Profit\n';
+            tradesData.forEach(t => {
+                csv += `${t.id},${t.date},${t.instrument},${t.strategy},${t.entry_price},${t.exit_price},${t.lot_size},${t.profit}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", `trading_journal_export_2026.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
